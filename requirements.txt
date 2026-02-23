@@ -1,0 +1,8 @@
+pandas
+scikit-learn
+tabpfn
+pyarrow
+fastparquet
+fastapi
+uvicorn
+python-multipart
