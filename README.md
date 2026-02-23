@@ -8,12 +8,14 @@ Para rodar esta API na sua máquina local utilizando o Docker, abra o terminal n
 
 ### 1. Construir a Imagem Docker (Build)
 Este comando prepara o ambiente isolado, instalando o Python, o FastAPI e todas as bibliotecas de Machine Learning necessárias (Pandas, Scikit-Learn, TabPFN, etc.).
+
 sudo docker build -t api-imputacao .
 
 *(Nota: Você só precisa rodar este comando a primeira vez ou se alterar o código no arquivo api.py ou requirements.txt).*
 
 ### 2. Ligar a API (Run)
 Este comando inicia o servidor web e faz a ponte da porta 8000 do container para o seu computador.
+
 sudo docker run -p 8000:8000 api-imputacao
 
 ---
