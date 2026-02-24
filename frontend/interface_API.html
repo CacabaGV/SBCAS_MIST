@@ -53,10 +53,10 @@
             <div class="form-upload">
                 <p>Escolha o modelo:</p>
                 <select id="meuSelect">
-                    <option value="tabpfn">TABPFN</option>
-                    <option value="média">Mean</option>
-                    <option value="mice">MICE</option>
-                    <option value="knn">KNN</option>
+                    <option value="tabpfn_imputer">TABPFN</option>
+                    <option value="Mean">Mean</option>
+                    <option value="MICE">MICE</option>
+                    <option value="KNN">KNN</option>
                     <option value="missforest">MissForest</option>
                 </select>
                 <p>Escolha Features para imputar</p>
@@ -85,8 +85,8 @@ document.getElementById('btn_selecao_dados').addEventListener('click', async fun
     uploadedFile = file;
     const formData = new FormData();
     formData.append('file', file);
-    try {
 
+    try {
         const response = await fetch('http://localhost:8000/describe', {
             method: 'POST',
             body: formData
@@ -236,9 +236,10 @@ document.getElementById('btn_selecao_modelo').addEventListener('click', async fu
         const blob = await response_imputacao.blob();
         const url = window.URL.createObjectURL(blob);
 
+        const extensao = file.name.split('.').pop();
         const linkDownload = document.createElement('a');
         linkDownload.href = url;
-        linkDownload.download = 'imputado_resultado.csv';
+        linkDownload.download = `imputado_resultado.${extensao}`;
         document.body.appendChild(linkDownload);
         linkDownload.click();
         linkDownload.remove();
