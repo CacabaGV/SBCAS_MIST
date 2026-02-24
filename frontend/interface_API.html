@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Seu Site - com Splash Screen</title>
+  <link rel="stylesheet" href="css/style_API.css">
+</head>
+<body>
+  <div class="site-content" id="siteContent">
+    <header>
+        <div class="logo">
+            <img style="width: 90px; height: 90px;" src="imgs/logo.png" alt="Logo MIST Saúde">
+            <p class="inter">MIST Saúde</p>
+        </div>
+        <div class="botao">
+            <a href="interface_API.html">Execute já</a>
+        </div>
+    </header>
+
+    <div class="container_branco"></div>
+
+    <div class="container">
+        <div class="card" id="card1">
+            <h2>Selecione Arquivo</h2>
+            <div class="form-upload" id="form_describe">
+                <input type="file" id="input_file">
+                <button id="btn_selecao_dados" type="button">Enviar</button>
+            </div>
+        </div>
+
+        <div class="card" id="card2">
+            <h2>Descrição Banco</h2>
+        </div>
+
+        <div class="card" id="card3">
+            <h2>Colunas NaNs</h2>
+        </div>
+
+        <!-- CORREÇÃO: card4 agora é para seleção de features dos quadrantes -->
+        <div class="card" id="card4">
+            <h2>Selecao features para Quadrantes</h2>
+            <p>Selecione as features:</p>
+            <input type="text" id="texto1" name="texto1" placeholder="feature_1,feature_2...">
+            <!-- CORREÇÃO: tag button fechada corretamente -->
+            <button id="btn_selecao_quadrantes" type="button">Enviar</button>
+        </div>
+
+        <!-- CORREÇÃO: card5 agora exibe as informações dos quadrantes -->
+        <div class="card" id="card5">
+            <h2>Informação Quadrantes</h2>
+        </div>
+
+        <div class="card" id="card6">
+            <h2>Imputação:</h2>
+            <div class="form-upload">
+                <p>Escolha o modelo:</p>
+                <select id="meuSelect">
+                    <option value="tabpfn">TABPFN</option>
+                    <option value="média">Mean</option>
+                    <option value="mice">MICE</option>
+                    <option value="knn">KNN</option>
+                    <option value="missforest">MissForest</option>
+                </select>
+                <p>Escolha Features para imputar</p>
+                <input type="text" id="texto2" name="texto2" placeholder="feature_1,feature_2...">
+                <p>Escolha Features para ignorar</p>
+                <input type="text" id="texto3" name="texto3" placeholder="feature_1,feature_2...">
+                <button id="btn_selecao_modelo" type="button">Enviar</button>
+            </div>
+        </div>
+    </div>
+
+  </div>
+
+<script>
+let uploadedFile = null;
+
+// ─── BOTÃO 1: Enviar arquivo → /describe e /colunas_nans ──────────────────────
+document.getElementById('btn_selecao_dados').addEventListener('click', async function () {
+    const fileInput = document.getElementById('input_file');
+    const file = fileInput.files[0];
+
+    if (!file) {
+        alert('Selecione um arquivo!');
+        return;
+    }
+
+    uploadedFile = file;
+    const formData = new FormData();
+    formData.append('file', file);
+    try {
+
+        const response = await fetch('http://localhost:8000/describe', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (!response.ok) {
+            throw new Error('Erro ao chamar /describe: ' + response.status);
+        }
+
+        const data = await response.json();
+
+        let html = `
+            <strong>Informações Gerais</strong><br>
+            ${data.shape.rows} linhas<br>
+            ${data.shape.cols} colunas<br><br>
+            <strong>Descrição</strong><br>
+            <table border="1" cellpadding="4" style="border-collapse:collapse">
+        `;
+
+        for (const col in data.describe) {
+            html += `<tr><td colspan="2"><strong>${col}</strong></td></tr>`;
+            for (const stat in data.describe[col]) {
+                html += `
+                    <tr>
+                        <td>${stat}</td>
+                        <td>${data.describe[col][stat]}</td>
+                    </tr>
+                `;
+            }
+        }
+
+        html += '</table>';
+        document.getElementById('card2').innerHTML = `<h2>Descrição Banco</h2>` + html;
+
+        const formData2 = new FormData();
+        formData2.append('file', file);
+
+        const response2 = await fetch('http://localhost:8000/colunas_nans', {
+            method: 'POST',
+            body: formData2
+        });
+
+        if (!response2.ok) {
+            throw new Error('Erro ao chamar /colunas_nans: ' + response2.status);
+        }
+
+        const data2 = await response2.json();
+
+        let html2 = `<table border="1" cellpadding="4" style="border-collapse:collapse">
+            <tr><th>Coluna</th><th>NaNs</th></tr>`;
+        for (const col in data2) {
+            html2 += `<tr><td>${col}</td><td>${data2[col]}</td></tr>`;
+        }
+        html2 += '</table>';
+
+        document.getElementById('card3').innerHTML = `<h2>Colunas NaNs</h2>` + html2;
+
+    } catch (err) {
+        console.error(err);
+        alert("Erro ao processar arquivo: " + err.message);
+    }
+});
+
+document.getElementById('btn_selecao_quadrantes').addEventListener('click', async function () {
+    const file = uploadedFile;
+    const featuresQuadr = document.getElementById('texto1').value;
+
+    if (!file) {
+        alert('Primeiro envie um arquivo no card 1!');
+        return;
+    }
+
+    if (!featuresQuadr.trim()) {
+        alert('Informe ao menos uma feature!');
+        return;
+    }
+
+    const features = featuresQuadr.split(',').map(f => f.trim());
+    const params = new URLSearchParams();
+    features.forEach(f => params.append('lista_features', f));
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+        const response3 = await fetch(`http://localhost:8000/info_quadrantes?${params.toString()}`, {
+            method: 'POST',
+            body: formData
+        });
+
+        if (!response3.ok) {
+            throw new Error('Erro ao chamar /info_quadrantes: ' + response3.status);
+        }
+
+        const data3 = await response3.json();
+
+        let html3 = '';
+        for (const item of data3) {
+            html3 += `<h3>${item.feature}</h3>`;
+            html3 += `<img src="data:image/png;base64,${item.imagem_base64}" style="max-width:100%"><br>`;
+            html3 += `<strong>Erro Médio:</strong><br>`;
+            html3 += `<table border="1" cellpadding="4" style="border-collapse:collapse">`;
+            for (const k in item.erro_medio) {
+                html3 += `<tr><td>${k}</td><td>${item.erro_medio[k]}</td></tr>`;
+            }
+            html3 += `</table><br>`;
+        }
+
+        document.getElementById('card5').innerHTML = `<h2>Informação Quadrantes</h2>` + html3;
+
+    } catch (err) {
+        console.error(err);
+        alert("Erro ao processar quadrantes: " + err.message);
+    }
+});
+
+document.getElementById('btn_selecao_modelo').addEventListener('click', async function () {
+    const file = uploadedFile;
+
+    const featuresImputar = document.getElementById('texto2').value;
+    const featuresIgnorar = document.getElementById('texto3').value;
+    const metodo = document.getElementById('meuSelect').value;
+
+    if (!file) {
+        alert('Primeiro envie um arquivo no card 1!');
+        return;
+    }
+
+    const formData3 = new FormData();
+    formData3.append('arquivo', file);
+    formData3.append('metodo', metodo);
+    formData3.append('features_a_imputar', featuresImputar);
+    if (featuresIgnorar.trim()) {
+        formData3.append('ignorar', featuresIgnorar);
+    }
+
+    try {
+        const response_imputacao = await fetch('http://localhost:8000/imputar', {
+            method: 'POST',
+            body: formData3
+        });
+
+        if (!response_imputacao.ok) {
+            throw new Error('Erro ao chamar /imputar: ' + response_imputacao.status);
+        }
+
+        const blob = await response_imputacao.blob();
+        const url = window.URL.createObjectURL(blob);
+
+        const linkDownload = document.createElement('a');
+        linkDownload.href = url;
+        linkDownload.download = 'imputado_resultado.csv';
+        document.body.appendChild(linkDownload);
+        linkDownload.click();
+        linkDownload.remove();
+        window.URL.revokeObjectURL(url);
+
+    } catch (err) {
+        console.error(err);
+        alert("Erro ao imputar dados: " + err.message);
+    }
+});
+</script>
+</body>
+</html>

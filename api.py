@@ -1,38 +1,140 @@
-from fastapi import FastAPI, File, UploadFile, Form
-from fastapi.responses import FileResponse
-import pandas as pd
-import torch
+import base64
+import io
 import os
-from tabpfn import TabPFNRegressor
-from sklearn.experimental import enable_iterative_imputer
-from sklearn.impute import IterativeImputer, KNNImputer
-from sklearn.ensemble import ExtraTreesRegressor
-from sklearn.linear_model import BayesianRidge
+from typing import List
 
-app = FastAPI(title="API de Imputação de Dados")
+import matplotlib.pyplot as plt
+import pandas as pd
+from fastapi import FastAPI, HTTPException, UploadFile, File, Query, Form
+from fastapi.responses import FileResponse
+from fastapi.middleware.cors import CORSMiddleware
+
+from sbcas_imputacao.benchmarking.experiment_runner import ExperimentRunner
+
+app = FastAPI(title="Imputacao API")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # para desenvolvimento
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+@app.post("/describe")
+async def describe_df(file: UploadFile = File(...)):
+
+    """
+    Shape e describe do dataframe passado
+    """
+
+    # if not file.filename.endswith(".parquet"):
+    #     raise HTTPException(status_code=400, detail="Só .parquet são aceitos")
+
+    if file.filename.endswith('.parquet'):
+        df = pd.read_parquet(file.file)
+    else:
+        df = pd.read_csv(file.file)
+
+    #try:
+    #    df = pd.read_parquet(file.file)
+    #except Exception as e:
+    #    raise HTTPException(status_code=400, detail=f"Falha ao ler arquivo: {e}")
+
+    runner = ExperimentRunner()
+    result = runner.describe(df)
+
+    return {
+        "shape": {"rows": int(result["shape"][0]), "cols": int(result["shape"][1])},
+        "describe": result["describe"].to_dict(),
+    }
+
+@app.post("/colunas_nans")
+async def colunas_nans(file: UploadFile = File(...)):
+
+    """
+    Nome das colunas e NaNs em cada uma
+    """
+
+    if file.filename.endswith('.parquet'):
+        df = pd.read_parquet(file.file)
+    else:
+        df = pd.read_csv(file.file)
+
+    #try:
+    #    df = pd.read_parquet(file.file)
+    #except Exception as e:
+    #    raise HTTPException(status_code=400, detail=f"falha ao ler df: {e}")
+
+    runner = ExperimentRunner()
+    result = runner.NaNs_each_column(df=df)
+    return {col: int(count) for col, count in result.items()}
+
+
+def _fig_to_base64(fig) -> str:
+    buffer = io.BytesIO()
+    fig.savefig(buffer, format="png", bbox_inches="tight")
+    buffer.seek(0)
+    return base64.b64encode(buffer.read()).decode("ascii")
+
+
+@app.post("/info_quadrantes")
+async def info_quad(
+    file: UploadFile = File(...),
+    lista_features: List[str] = Query(...),
+):
+    """
+    Informações dos quadrantes por feature
+    """
+    #try:
+    #    df = pd.read_parquet(file.file)
+    #except Exception as e:
+    #    raise HTTPException(status_code=400, detail=f"falha ao ler df: {e}")
+
+    if file.filename.endswith('.parquet'):
+        df = pd.read_parquet(file.file)
+    else:
+        df = pd.read_csv(file.file)
+    
+    runner = ExperimentRunner()
+    results = runner.runners(df=df, lista_features=lista_features)
+
+    payload = []
+    for item in results:
+        fig = item["imagem"]
+        payload.append({
+            "feature": item["feature"],
+            "erro_medio": item["erro_medio"].to_dict(),
+            "imagem_base64": _fig_to_base64(fig),
+        })
+        plt.close(fig)
+
+    return payload
 
 @app.post("/imputar")
 async def imputar_dados(
     arquivo: UploadFile = File(...),
     metodo: str = Form("mice"),
-    feature_alvo: str = Form(None),
+    features_a_imputar: str = Form("features_a_imputar"), 
     ignorar: str = Form(None)
 ):
-    # Salva o arquivo recebido pelo navegador temporariamente no container
+    
+    """
+    Imputar dados faltantes das features selecionadas
+    """
+
     caminho_entrada = f"temp_{arquivo.filename}"
     with open(caminho_entrada, "wb") as f:
         f.write(await arquivo.read())
         
-    # Lê os dados
     if caminho_entrada.endswith('.parquet'):
         df = pd.read_parquet(caminho_entrada)
     else:
         df = pd.read_csv(caminho_entrada)
 
-    # ---> CORREÇÃO: SALVA A ORDEM E QUAIS ERAM AS COLUNAS ORIGINAIS <---
     colunas_originais = df.columns.tolist()
 
-    # --- Lógica de isolar colunas ---
     colunas_ignoradas = {}
     if ignorar:
         colunas_para_ignorar = [col.strip() for col in ignorar.split(',')]
@@ -41,57 +143,29 @@ async def imputar_dados(
                 colunas_ignoradas[col] = df[col].copy()
                 df = df.drop(columns=[col])
 
-    # --- Lógica de Imputação ---
-    if metodo == 'media':
-        df_imputed = df.copy()
-        for col in df_imputed.columns:
-            if df_imputed[col].isna().any():
-                df_imputed[col] = df_imputed[col].fillna(df_imputed[col].mean())
-                
-    elif metodo == 'knn':
-        imputer = KNNImputer(n_neighbors=10)
-        df_imputed = pd.DataFrame(imputer.fit_transform(df), columns=df.columns, index=df.index)
-        
-    elif metodo == 'mice':
-        imputer = IterativeImputer(estimator=BayesianRidge(), max_iter=20, random_state=7)
-        df_imputed = pd.DataFrame(imputer.fit_transform(df), columns=df.columns, index=df.index)
-        
-    elif metodo == 'missforest':
-        imputer = IterativeImputer(estimator=ExtraTreesRegressor(n_estimators=10, random_state=7), max_iter=20, random_state=7)
-        df_imputed = pd.DataFrame(imputer.fit_transform(df), columns=df.columns, index=df.index)
-        
-    elif metodo == 'tabpfn':
-        df_imputed = df.copy()
-        df_train = df[df[feature_alvo].notna()]
-        df_missing = df[df[feature_alvo].isna()]
-        
-        if len(df_missing) > 0:
-            X_train = df_train.drop(columns=[feature_alvo])
-            y_train = df_train[feature_alvo]
-            X_test = df_missing.drop(columns=[feature_alvo])
-            
-            device = "cuda" if torch.cuda.is_available() else "cpu"
-            reg = TabPFNRegressor(device=device)
-            reg.fit(X_train.values, y_train.values)
-            preds = reg.predict(X_test.values)
-            df_imputed.loc[df_imputed[feature_alvo].isna(), feature_alvo] = preds
+    if features_a_imputar:
+        colunas_alvo = [col.strip() for col in features_a_imputar.split(',')]
+    else:
+        colunas_alvo = df.columns[df.isna().any()].tolist()
 
-    # --- Devolve as colunas e reorganiza a ordem original ---
+    runner = ExperimentRunner()
+    df_imputed = df.copy()
+    
+    for col in colunas_alvo:
+        if col in df_imputed.columns and df_imputed[col].isna().any():
+            df_imputed = runner.imputar(df=df_imputed, algoritmo=metodo, feature=col)
+
     for col, valores in colunas_ignoradas.items():
         df_imputed[col] = valores
         
-    # ---> CORREÇÃO: REORGANIZA USANDO A LISTA QUE SALVAMOS LÁ EM CIMA <---
     df_imputed = df_imputed[colunas_originais]
 
-    # Salva o resultado e prepara para enviar de volta ao usuário
     caminho_saida = f"imputado_{arquivo.filename}"
     if caminho_saida.endswith('.parquet'):
         df_imputed.to_parquet(caminho_saida, index=False)
     else:
         df_imputed.to_csv(caminho_saida, index=False)
         
-    # Limpa o arquivo de entrada para não lotar o container
     os.remove(caminho_entrada)
     
-    # O FastAPI empacota o arquivo e faz o download automático no navegador
     return FileResponse(path=caminho_saida, filename=caminho_saida)
