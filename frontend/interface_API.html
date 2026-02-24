@@ -37,16 +37,13 @@
             <h2>Colunas NaNs</h2>
         </div>
 
-        <!-- CORREÇÃO: card4 agora é para seleção de features dos quadrantes -->
         <div class="card" id="card4">
             <h2>Selecao features para Quadrantes</h2>
             <p>Selecione as features:</p>
             <input type="text" id="texto1" name="texto1" placeholder="feature_1,feature_2...">
-            <!-- CORREÇÃO: tag button fechada corretamente -->
             <button id="btn_selecao_quadrantes" type="button">Enviar</button>
         </div>
 
-        <!-- CORREÇÃO: card5 agora exibe as informações dos quadrantes -->
         <div class="card" id="card5">
             <h2>Informação Quadrantes</h2>
         </div>
@@ -76,7 +73,6 @@
 <script>
 let uploadedFile = null;
 
-// ─── BOTÃO 1: Enviar arquivo → /describe e /colunas_nans ──────────────────────
 document.getElementById('btn_selecao_dados').addEventListener('click', async function () {
     const fileInput = document.getElementById('input_file');
     const file = fileInput.files[0];
