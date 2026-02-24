@@ -3,171 +3,527 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Seu Site - com Splash Screen</title>
-  <link rel="stylesheet" href="css/style_API.css">
+  <title>MIST Saúde - Análise de Dados</title>
+  <style>
+    /* Reset e estilos globais */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      color: #333;
+    }
+
+    /* Container principal */
+    .site-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* Header */
+    header {
+      background: white;
+      border-radius: 15px;
+      padding: 20px 30px;
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo img {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #667eea;
+    }
+
+    .logo p {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #667eea;
+      margin: 0;
+    }
+
+    .botao a {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      text-decoration: none;
+      padding: 12px 30px;
+      border-radius: 25px;
+      font-weight: 500;
+      transition: transform 0.3s, box-shadow 0.3s;
+      display: inline-block;
+    }
+
+    .botao a:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    /* Container do conteúdo */
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 25px;
+      margin-top: 20px;
+    }
+
+    /* Cards */
+    .card {
+      background: white;
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+      display: flex;
+      flex-direction: column;
+      height: fit-content;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 50px rgba(0,0,0,0.15);
+    }
+
+    .card h2 {
+      color: #667eea;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    /* Formulários */
+    .form-upload {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    input[type="file"] {
+      padding: 10px;
+      border: 2px dashed #667eea;
+      border-radius: 10px;
+      background: #f8f9ff;
+      cursor: pointer;
+    }
+
+    input[type="text"], select {
+      padding: 12px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+      width: 100%;
+    }
+
+    input[type="text"]:focus, select:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    button {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+      align-self: flex-start;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    /* Tabelas */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    th {
+      background: #667eea;
+      color: white;
+      padding: 12px;
+      text-align: left;
+    }
+
+    td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: #f8f9ff;
+    }
+
+    /* Imagens nos cards */
+    .card img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin: 15px 0;
+      border: 1px solid #e0e0e0;
+    }
+
+    /* Mensagens de alerta customizadas */
+    .alert {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: white;
+      color: #333;
+      padding: 15px 25px;
+      border-radius: 10px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+      border-left: 4px solid #667eea;
+      z-index: 1000;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    /* Loading spinner */
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #667eea;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-left: 10px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .logo {
+        flex-direction: column;
+      }
+
+      .container {
+        grid-template-columns: 1fr;
+      }
+
+      button {
+        width: 100%;
+      }
+
+      table {
+        font-size: 0.9rem;
+      }
+
+      td, th {
+        padding: 8px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .site-content {
+        padding: 10px;
+      }
+
+      .card {
+        padding: 15px;
+      }
+
+      .card h2 {
+        font-size: 1.2rem;
+      }
+
+      .logo p {
+        font-size: 1.2rem;
+      }
+
+      .logo img {
+        width: 50px;
+        height: 50px;
+      }
+
+      table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="site-content" id="siteContent">
     <header>
-        <div class="logo">
-            <img style="width: 90px; height: 90px;" src="imgs/logo.png" alt="Logo MIST Saúde">
-            <p class="inter">MIST Saúde</p>
-        </div>
-        <div class="botao">
-            <a href="interface_API.html">Execute já</a>
-        </div>
+      <div class="logo">
+        <img style="width: 90px; height: 90px;" src="imgs/logo.png" alt="Logo MIST Saúde">
+        <p class="inter">MIST Saúde</p>
+      </div>
+      <div class="botao">
+        <a href="interface_API.html">Execute já</a>
+      </div>
     </header>
 
-    <div class="container_branco"></div>
-
     <div class="container">
-        <div class="card" id="card1">
-            <h2>Selecione Arquivo</h2>
-            <div class="form-upload" id="form_describe">
-                <input type="file" id="input_file">
-                <button id="btn_selecao_dados" type="button">Enviar</button>
-            </div>
+      <!-- Card 1 - Upload -->
+      <div class="card" id="card1">
+        <h2>📁 Selecione Arquivo</h2>
+        <div class="form-upload" id="form_describe">
+          <input type="file" id="input_file" accept=".csv,.xlsx,.xls">
+          <button id="btn_selecao_dados" type="button">Enviar Arquivo</button>
         </div>
+      </div>
 
-        <div class="card" id="card2">
-            <h2>Descrição Banco</h2>
-        </div>
+      <!-- Card 2 - Descrição -->
+      <div class="card" id="card2">
+        <h2>📊 Descrição do Banco</h2>
+        <p class="placeholder">Aguardando arquivo...</p>
+      </div>
 
-        <div class="card" id="card3">
-            <h2>Colunas NaNs</h2>
-        </div>
+      <!-- Card 3 - NaNs -->
+      <div class="card" id="card3">
+        <h2>🔍 Colunas com NaNs</h2>
+        <p class="placeholder">Aguardando arquivo...</p>
+      </div>
 
-        <div class="card" id="card4">
-            <h2>Selecao features para Quadrantes</h2>
-            <p>Selecione as features:</p>
-            <input type="text" id="texto1" name="texto1" placeholder="feature_1,feature_2...">
-            <button id="btn_selecao_quadrantes" type="button">Enviar</button>
-        </div>
+      <!-- Card 4 - Features para Quadrantes -->
+      <div class="card" id="card4">
+        <h2>📐 Seleção para Quadrantes</h2>
+        <p>Selecione as features (separadas por vírgula):</p>
+        <input type="text" id="texto1" name="texto1" placeholder="ex: idade,renda,score">
+        <button id="btn_selecao_quadrantes" type="button">Gerar Quadrantes</button>
+      </div>
 
-        <div class="card" id="card5">
-            <h2>Informação Quadrantes</h2>
-        </div>
+      <!-- Card 5 - Informação Quadrantes -->
+      <div class="card" id="card5">
+        <h2>📈 Informação dos Quadrantes</h2>
+        <p class="placeholder">Aguardando análise...</p>
+      </div>
 
-        <div class="card" id="card6">
-            <h2>Imputação:</h2>
-            <div class="form-upload">
-                <p>Escolha o modelo:</p>
-                <select id="meuSelect">
-                    <option value="tabpfn">TABPFN</option>
-                    <option value="média">Mean</option>
-                    <option value="mice">MICE</option>
-                    <option value="knn">KNN</option>
-                    <option value="missforest">MissForest</option>
-                </select>
-                <p>Escolha Features para imputar</p>
-                <input type="text" id="texto2" name="texto2" placeholder="feature_1,feature_2...">
-                <p>Escolha Features para ignorar</p>
-                <input type="text" id="texto3" name="texto3" placeholder="feature_1,feature_2...">
-                <button id="btn_selecao_modelo" type="button">Enviar</button>
-            </div>
+      <!-- Card 6 - Imputação -->
+      <div class="card" id="card6">
+        <h2>🔄 Imputação de Dados</h2>
+        <div class="form-upload">
+          <p>Escolha o modelo:</p>
+          <select id="meuSelect">
+            <option value="tabpfn">TABPFN (Recomendado)</option>
+            <option value="média">Média (Mean)</option>
+            <option value="mice">MICE</option>
+            <option value="knn">KNN</option>
+            <option value="missforest">MissForest</option>
+          </select>
+          
+          <p>Features para imputar:</p>
+          <input type="text" id="texto2" name="texto2" placeholder="feature_1, feature_2...">
+          
+          <p>Features para ignorar:</p>
+          <input type="text" id="texto3" name="texto3" placeholder="feature_1, feature_2...">
+          
+          <button id="btn_selecao_modelo" type="button">Executar Imputação</button>
         </div>
+      </div>
     </div>
-
   </div>
 
-<script>
-let uploadedFile = null;
+  <script>
+    let uploadedFile = null;
 
-document.getElementById('btn_selecao_dados').addEventListener('click', async function () {
-    const fileInput = document.getElementById('input_file');
-    const file = fileInput.files[0];
-
-    if (!file) {
-        alert('Selecione um arquivo!');
-        return;
+    // Função para mostrar alertas customizados
+    function showAlert(message, type = 'info') {
+      const alert = document.createElement('div');
+      alert.className = 'alert';
+      alert.textContent = message;
+      document.body.appendChild(alert);
+      
+      setTimeout(() => {
+        alert.remove();
+      }, 3000);
     }
 
-    uploadedFile = file;
-    const formData = new FormData();
-    formData.append('file', file);
+    // Função para mostrar loading em botões
+    function setLoading(button, isLoading) {
+      if (isLoading) {
+        button.disabled = true;
+        button.innerHTML = 'Processando <span class="loading"></span>';
+      } else {
+        button.disabled = false;
+        button.innerHTML = button.getAttribute('data-original-text');
+      }
+    }
 
-    try {
+    // Salvar texto original dos botões
+    document.querySelectorAll('button').forEach(btn => {
+      btn.setAttribute('data-original-text', btn.innerHTML);
+    });
+
+    // Card 1 - Upload e Describe
+    document.getElementById('btn_selecao_dados').addEventListener('click', async function () {
+      const fileInput = document.getElementById('input_file');
+      const file = fileInput.files[0];
+      const button = this;
+
+      if (!file) {
+        showAlert('Por favor, selecione um arquivo!', 'error');
+        return;
+      }
+
+      setLoading(button, true);
+      uploadedFile = file;
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
         const response = await fetch('http://localhost:8000/describe', {
-            method: 'POST',
-            body: formData
+          method: 'POST',
+          body: formData
         });
 
         if (!response.ok) throw new Error('Erro ao chamar /describe: ' + response.status);
 
         const data = await response.json();
 
+        // Atualizar Card 2
         let html = `
-            <strong>Informações Gerais</strong><br>
-            ${data.shape.rows} linhas<br>
-            ${data.shape.cols} colunas<br><br>
-            <strong>Descrição</strong><br>
-            <table border="1" cellpadding="4" style="border-collapse:collapse">
+          <div style="overflow-x: auto;">
+            <p><strong>Informações Gerais</strong></p>
+            <p>📊 ${data.shape.rows} linhas | ${data.shape.cols} colunas</p>
+            <p><strong>Descrição Estatística</strong></p>
+            <table>
         `;
+        
         for (const col in data.describe) {
-            html += `<tr><td colspan="2"><strong>${col}</strong></td></tr>`;
-            for (const stat in data.describe[col]) {
-                html += `<tr><td>${stat}</td><td>${data.describe[col][stat]}</td></tr>`;
-            }
+          html += `<tr><td colspan="2"><strong>${col}</strong></td></tr>`;
+          for (const stat in data.describe[col]) {
+            const value = data.describe[col][stat];
+            html += `<tr><td>${stat}</td><td>${typeof value === 'number' ? value.toFixed(4) : value}</td></tr>`;
+          }
         }
-        html += '</table>';
-        document.getElementById('card2').innerHTML = `<h2>Descrição Banco</h2>` + html;
+        html += '</table></div>';
+        document.getElementById('card2').innerHTML = `<h2>📊 Descrição do Banco</h2>` + html;
 
+        // Atualizar Card 3
         const formData2 = new FormData();
         formData2.append('file', file);
 
         const response2 = await fetch('http://localhost:8000/colunas_nans', {
-            method: 'POST',
-            body: formData2
+          method: 'POST',
+          body: formData2
         });
 
         if (!response2.ok) throw new Error('Erro ao chamar /colunas_nans: ' + response2.status);
 
         const data2 = await response2.json();
 
-        let html2 = `<table border="1" cellpadding="4" style="border-collapse:collapse">
-            <tr><th>Coluna</th><th>NaNs</th></tr>`;
+        let html2 = `<div style="overflow-x: auto;"><table>
+          <tr><th>Coluna</th><th>Valores NaN</th><th>%</th></tr>`;
+        
+        const totalRows = data.shape.rows;
         for (const col in data2) {
-            html2 += `<tr><td>${col}</td><td>${data2[col]}</td></tr>`;
+          const nanCount = data2[col];
+          const percentage = ((nanCount / totalRows) * 100).toFixed(2);
+          html2 += `<tr><td>${col}</td><td>${nanCount}</td><td>${percentage}%</td></tr>`;
         }
-        html2 += '</table>';
-        document.getElementById('card3').innerHTML = `<h2>Colunas NaNs</h2>` + html2;
+        html2 += '</table></div>';
+        document.getElementById('card3').innerHTML = `<h2>🔍 Colunas com NaNs</h2>` + html2;
+        
+        showAlert('Arquivo processado com sucesso!', 'success');
 
-    } catch (err) {
+      } catch (err) {
         console.error(err);
-        alert("Erro ao processar arquivo: " + err.message);
-    }
-});
+        showAlert('Erro ao processar arquivo: ' + err.message, 'error');
+      } finally {
+        setLoading(button, false);
+      }
+    });
 
-document.getElementById('btn_selecao_quadrantes').addEventListener('click', async function () {
-    const file = uploadedFile;
-    const featuresQuadr = document.getElementById('texto1').value;
+    // Card 4 - Quadrantes
+    document.getElementById('btn_selecao_quadrantes').addEventListener('click', async function () {
+      const file = uploadedFile;
+      const featuresQuadr = document.getElementById('texto1').value;
+      const button = this;
 
-    if (!file) { alert('Primeiro envie um arquivo no card 1!'); return; }
-    if (!featuresQuadr.trim()) { alert('Informe ao menos uma feature!'); return; }
+      if (!file) { 
+        showAlert('Primeiro envie um arquivo no card 1!', 'error'); 
+        return; 
+      }
+      
+      if (!featuresQuadr.trim()) { 
+        showAlert('Informe ao menos uma feature!', 'error'); 
+        return; 
+      }
 
-    const features = featuresQuadr.split(',').map(f => f.trim());
-    const params = new URLSearchParams();
-    features.forEach(f => params.append('lista_features', f));
+      setLoading(button, true);
+      const features = featuresQuadr.split(',').map(f => f.trim());
+      const params = new URLSearchParams();
+      features.forEach(f => params.append('lista_features', f));
 
-    const formData = new FormData();
-    formData.append('file', file);
+      const formData = new FormData();
+      formData.append('file', file);
 
-    try {
+      try {
         const response3 = await fetch(`http://localhost:8000/info_quadrantes?${params.toString()}`, {
-            method: 'POST',
-            body: formData
+          method: 'POST',
+          body: formData
         });
 
         if (!response3.ok) throw new Error('Erro ao chamar /info_quadrantes: ' + response3.status);
 
         const data3 = await response3.json();
 
-        let html3 = '';
+        let html3 = '<div style="max-height: 500px; overflow-y: auto;">';
         for (const item of data3) {
-            html3 += `<h3>${item.feature}</h3>`;
-            html3 += `<img src="data:image/png;base64,${item.imagem_base64}" style="max-width:100%"><br>`;
-            html3 += `<strong>Erro Médio:</strong><br>`;
-            html3 += `<table border="1" cellpadding="4" style="border-collapse:collapse">`;
+          html3 += `<div style="margin-bottom: 30px;">`;
+          html3 += `<h3 style="color: #667eea;">📊 ${item.feature}</h3>`;
+          html3 += `<img src="data:image/png;base64,${item.imagem_base64}" style="max-width:100%; border-radius: 8px; margin: 15px 0;"><br>`;
+          
+          if (item.erro_medio && Object.keys(item.erro_medio).length > 0) {
+            html3 += `<p><strong>Erro Médio por Método:</strong></p>`;
+            html3 += `<div style="overflow-x: auto;"><table>`;
 
             const metodos = Object.keys(item.erro_medio);
             const quadrantes = metodos.length > 0 ? Object.keys(item.erro_medio[metodos[0]]) : [];
@@ -177,45 +533,62 @@ document.getElementById('btn_selecao_quadrantes').addEventListener('click', asyn
             html3 += `</tr>`;
 
             for (const quadrante of quadrantes) {
-                html3 += `<tr><td><strong>${quadrante}</strong></td>`;
-                for (const metodo of metodos) {
-                    const val = item.erro_medio[metodo][quadrante];
-                    html3 += `<td>${(val !== null && val !== undefined) ? Number(val).toFixed(4) : '-'}</td>`;
-                }
-                html3 += `</tr>`;
+              html3 += `<tr><td><strong>${quadrante}</strong></td>`;
+              for (const metodo of metodos) {
+                const val = item.erro_medio[metodo][quadrante];
+                html3 += `<td>${(val !== null && val !== undefined) ? Number(val).toFixed(4) : '-'}</td>`;
+              }
+              html3 += `</tr>`;
             }
-
-            html3 += `</table><br>`;
+            html3 += `</table></div>`;
+          }
+          html3 += `</div>`;
         }
+        html3 += '</div>';
 
-        document.getElementById('card5').innerHTML = `<h2>Informação Quadrantes</h2>` + html3;
+        document.getElementById('card5').innerHTML = `<h2>📈 Informação dos Quadrantes</h2>` + html3;
+        showAlert('Quadrantes gerados com sucesso!', 'success');
 
-    } catch (err) {
+      } catch (err) {
         console.error(err);
-        alert("Erro ao processar quadrantes: " + err.message);
-    }
-});
+        showAlert('Erro ao processar quadrantes: ' + err.message, 'error');
+      } finally {
+        setLoading(button, false);
+      }
+    });
 
-document.getElementById('btn_selecao_modelo').addEventListener('click', async function () {
-    const file = uploadedFile;
-    const featuresImputar = document.getElementById('texto2').value;
-    const featuresIgnorar = document.getElementById('texto3').value;
-    const metodo = document.getElementById('meuSelect').value;
+    // Card 6 - Imputação
+    document.getElementById('btn_selecao_modelo').addEventListener('click', async function () {
+      const file = uploadedFile;
+      const featuresImputar = document.getElementById('texto2').value;
+      const featuresIgnorar = document.getElementById('texto3').value;
+      const metodo = document.getElementById('meuSelect').value;
+      const button = this;
 
-    if (!file) { alert('Primeiro envie um arquivo no card 1!'); return; }
+      if (!file) { 
+        showAlert('Primeiro envie um arquivo no card 1!', 'error'); 
+        return; 
+      }
 
-    const formData3 = new FormData();
-    formData3.append('arquivo', file);
-    formData3.append('metodo', metodo);
-    formData3.append('features_a_imputar', featuresImputar);
-    if (featuresIgnorar.trim()) {
+      if (!featuresImputar.trim()) {
+        showAlert('Informe as features para imputar!', 'error');
+        return;
+      }
+
+      setLoading(button, true);
+      const formData3 = new FormData();
+      formData3.append('arquivo', file);
+      formData3.append('metodo', metodo);
+      formData3.append('features_a_imputar', featuresImputar);
+      
+      if (featuresIgnorar.trim()) {
         formData3.append('ignorar', featuresIgnorar);
-    }
+      }
 
-    try {
+      try {
         const response_imputacao = await fetch('http://localhost:8000/imputar', {
-            method: 'POST',
-            body: formData3
+          method: 'POST',
+          body: formData3
         });
 
         if (!response_imputacao.ok) throw new Error('Erro ao chamar /imputar: ' + response_imputacao.status);
@@ -232,11 +605,29 @@ document.getElementById('btn_selecao_modelo').addEventListener('click', async fu
         linkDownload.remove();
         window.URL.revokeObjectURL(url);
 
-    } catch (err) {
+        showAlert('Arquivo imputado baixado com sucesso!', 'success');
+
+      } catch (err) {
         console.error(err);
-        alert("Erro ao imputar dados: " + err.message);
-    }
-});
-</script>
+        showAlert('Erro ao imputar dados: ' + err.message, 'error');
+      } finally {
+        setLoading(button, false);
+      }
+    });
+
+    // Placeholder styling
+    const style = document.createElement('style');
+    style.textContent = `
+      .placeholder {
+        color: #999;
+        font-style: italic;
+        padding: 20px;
+        text-align: center;
+        background: #f8f9ff;
+        border-radius: 8px;
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
 </body>
 </html>
