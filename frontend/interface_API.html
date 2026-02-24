@@ -53,10 +53,10 @@
             <div class="form-upload">
                 <p>Escolha o modelo:</p>
                 <select id="meuSelect">
-                    <option value="tabpfn_imputer">TABPFN</option>
-                    <option value="Mean">Mean</option>
-                    <option value="MICE">MICE</option>
-                    <option value="KNN">KNN</option>
+                    <option value="tabpfn">TABPFN</option>
+                    <option value="média">Mean</option>
+                    <option value="mice">MICE</option>
+                    <option value="knn">KNN</option>
                     <option value="missforest">MissForest</option>
                 </select>
                 <p>Escolha Features para imputar</p>
@@ -92,9 +92,7 @@ document.getElementById('btn_selecao_dados').addEventListener('click', async fun
             body: formData
         });
 
-        if (!response.ok) {
-            throw new Error('Erro ao chamar /describe: ' + response.status);
-        }
+        if (!response.ok) throw new Error('Erro ao chamar /describe: ' + response.status);
 
         const data = await response.json();
 
@@ -105,19 +103,12 @@ document.getElementById('btn_selecao_dados').addEventListener('click', async fun
             <strong>Descrição</strong><br>
             <table border="1" cellpadding="4" style="border-collapse:collapse">
         `;
-
         for (const col in data.describe) {
             html += `<tr><td colspan="2"><strong>${col}</strong></td></tr>`;
             for (const stat in data.describe[col]) {
-                html += `
-                    <tr>
-                        <td>${stat}</td>
-                        <td>${data.describe[col][stat]}</td>
-                    </tr>
-                `;
+                html += `<tr><td>${stat}</td><td>${data.describe[col][stat]}</td></tr>`;
             }
         }
-
         html += '</table>';
         document.getElementById('card2').innerHTML = `<h2>Descrição Banco</h2>` + html;
 
@@ -129,9 +120,7 @@ document.getElementById('btn_selecao_dados').addEventListener('click', async fun
             body: formData2
         });
 
-        if (!response2.ok) {
-            throw new Error('Erro ao chamar /colunas_nans: ' + response2.status);
-        }
+        if (!response2.ok) throw new Error('Erro ao chamar /colunas_nans: ' + response2.status);
 
         const data2 = await response2.json();
 
@@ -141,7 +130,6 @@ document.getElementById('btn_selecao_dados').addEventListener('click', async fun
             html2 += `<tr><td>${col}</td><td>${data2[col]}</td></tr>`;
         }
         html2 += '</table>';
-
         document.getElementById('card3').innerHTML = `<h2>Colunas NaNs</h2>` + html2;
 
     } catch (err) {
@@ -154,15 +142,8 @@ document.getElementById('btn_selecao_quadrantes').addEventListener('click', asyn
     const file = uploadedFile;
     const featuresQuadr = document.getElementById('texto1').value;
 
-    if (!file) {
-        alert('Primeiro envie um arquivo no card 1!');
-        return;
-    }
-
-    if (!featuresQuadr.trim()) {
-        alert('Informe ao menos uma feature!');
-        return;
-    }
+    if (!file) { alert('Primeiro envie um arquivo no card 1!'); return; }
+    if (!featuresQuadr.trim()) { alert('Informe ao menos uma feature!'); return; }
 
     const features = featuresQuadr.split(',').map(f => f.trim());
     const params = new URLSearchParams();
@@ -177,9 +158,7 @@ document.getElementById('btn_selecao_quadrantes').addEventListener('click', asyn
             body: formData
         });
 
-        if (!response3.ok) {
-            throw new Error('Erro ao chamar /info_quadrantes: ' + response3.status);
-        }
+        if (!response3.ok) throw new Error('Erro ao chamar /info_quadrantes: ' + response3.status);
 
         const data3 = await response3.json();
 
@@ -189,9 +168,23 @@ document.getElementById('btn_selecao_quadrantes').addEventListener('click', asyn
             html3 += `<img src="data:image/png;base64,${item.imagem_base64}" style="max-width:100%"><br>`;
             html3 += `<strong>Erro Médio:</strong><br>`;
             html3 += `<table border="1" cellpadding="4" style="border-collapse:collapse">`;
-            for (const k in item.erro_medio) {
-                html3 += `<tr><td>${k}</td><td>${item.erro_medio[k]}</td></tr>`;
+
+            const metodos = Object.keys(item.erro_medio);
+            const quadrantes = metodos.length > 0 ? Object.keys(item.erro_medio[metodos[0]]) : [];
+
+            html3 += `<tr><th>Quadrante</th>`;
+            metodos.forEach(m => { html3 += `<th>${m}</th>`; });
+            html3 += `</tr>`;
+
+            for (const quadrante of quadrantes) {
+                html3 += `<tr><td><strong>${quadrante}</strong></td>`;
+                for (const metodo of metodos) {
+                    const val = item.erro_medio[metodo][quadrante];
+                    html3 += `<td>${(val !== null && val !== undefined) ? Number(val).toFixed(4) : '-'}</td>`;
+                }
+                html3 += `</tr>`;
             }
+
             html3 += `</table><br>`;
         }
 
@@ -205,15 +198,11 @@ document.getElementById('btn_selecao_quadrantes').addEventListener('click', asyn
 
 document.getElementById('btn_selecao_modelo').addEventListener('click', async function () {
     const file = uploadedFile;
-
     const featuresImputar = document.getElementById('texto2').value;
     const featuresIgnorar = document.getElementById('texto3').value;
     const metodo = document.getElementById('meuSelect').value;
 
-    if (!file) {
-        alert('Primeiro envie um arquivo no card 1!');
-        return;
-    }
+    if (!file) { alert('Primeiro envie um arquivo no card 1!'); return; }
 
     const formData3 = new FormData();
     formData3.append('arquivo', file);
@@ -229,9 +218,7 @@ document.getElementById('btn_selecao_modelo').addEventListener('click', async fu
             body: formData3
         });
 
-        if (!response_imputacao.ok) {
-            throw new Error('Erro ao chamar /imputar: ' + response_imputacao.status);
-        }
+        if (!response_imputacao.ok) throw new Error('Erro ao chamar /imputar: ' + response_imputacao.status);
 
         const blob = await response_imputacao.blob();
         const url = window.URL.createObjectURL(blob);
