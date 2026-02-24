@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Seu Site - com Splash Screen</title>
+  <link rel="stylesheet" href="css/style_API.css">
+  
+  
+</head>
+<body>
+  <div class="site-content" id="siteContent">
+    <header>
+        <div class="logo">
+            <img style="width: 90px; height: 90px;" src="imgs/logo.png" alt="Logo MIST Saúde">
+            <p class="inter">MIST Saúde</p>
+        </div>
+      
+        <div class="botao">
+            <a href="interface_API.html">Execute já</a>
+        </div>
+    </header>
+
+    <div class="container_branco"></div>
+
+    <div class="container">
+        <div class="card" id="card1">
+            <h2>Selecione Arquivo</h2>
+            <div class="form-upload" id="form_describe">
+                <input type="file" id="input_file">
+                <p>Escolha Features</p>
+                <input type="text" id="texto1" name="texto1" placeholder="feature_1">
+                <button id="btn_selecao_dados" type="button">Enviar</button>
+            </div>
+        </div>
+
+        <div class="card" id="card2">
+            <h2>Informações Banco</h2>
+        </div>
+
+        <div class="card" id="card3">
+            <h2>Grafico Quadrantes</h2>
+        </div>
+
+        <div class="card" id="card4">
+            <h2>Imputação:</h2>
+            <div class="form-upload" id="form_describe">
+                <p>Escolha o modelo:</p>
+                <select id="meuSelect" >
+                    <option value="tabpfn_imputer">TABPFN</option>
+                    <option value="Mean">Mean</option>
+                    <option value="MICE">MICE</option>
+                    <option value="KNN">KNN</option>
+                    <option value="missforest">MissForest</option>
+                </select>
+                <p>Escolha Features</p>
+                <input type="text" id="texto2" name="texto2" placeholder="feature_1,feature_2...">
+                <p>Escolha Features para ignorar</p>
+                <input type="text" id="texto3" name="texto3" placeholder="feature_1,feature_2...">
+                <button id="btn_selecao_modelo" type="button">Enviar</button> 
+            </div>
+        </div>
+    </div>
+
+  </div>
+
+<script>
+let uploadedFile = null;
+
+document.getElementById('btn_selecao_dados').addEventListener('click', async function () {
+    const fileInput = document.getElementById('input_file');
+    const file = fileInput.files[0];
+    const features = document.getElementById('texto1').value;
+    const metodo = document.getElementById('meuSelect').value;
+    const features_imputacao = document.getElementById('texto2').value;
+    const features_ignorar = document.getElementById('texto3').value;
+
+    if (!file) {
+        alert('Selecione um arquivo!');
+        return;
+    }
+
+    uploadedFile = file;
+    const formData = new FormData();
+    formData.append('arquivo', file);
+    formData.append('feature_grafico', features);
+
+    const formData2 = new FormData();
+    formData2.append('arquivo', file);
+    formData2.append('metodo', metodo);
+    formData2.append('features_a_imputar', features_imputacao);
+    formData2.append('ignorar', features_ignorar);
+
+    try {
+        const response = await fetch('http://localhost:8000/describe', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (!response.ok) {
+            throw new Error('Erro ao chamar API: ' + response.status);
+        }
+
+        const data = await response.json();
+
+        let html = `
+            <strong>Informações Gerais</strong><br>
+            ${data.informacoes_gerais.total_linhas} linhas<br>
+            ${data.informacoes_gerais.total_colunas} colunas<br><br>
+
+            <strong>Estatísticas Descritivas</strong><br>
+            <table border="1" cellpadding="4" style="border-collapse:collapse">
+        `;
+
+        for (const col in data.estatisticas_descritivas) {
+            html += `<tr><td colspan="2"><strong>${col}</strong></td></tr>`;
+            for (const stat in data.estatisticas_descritivas[col]) {
+                html += `
+                    <tr>
+                        <td>${stat}</td>
+                        <td>${data.estatisticas_descritivas[col][stat]}</td>
+                    </tr>
+                `;
+            }
+        }
+
+        html += '</table>';
+
+        document.getElementById('card2').innerHTML =
+            `<h2>Informações Banco</h2>` + html;
+
+        document.getElementById('card3').innerHTML = `
+            <h2>Gráfico Quadrantes</h2>
+            <img src="${data.grafico_quadrantes_base64}"
+                 style="max-width:100%; border-radius:8px;"
+                 alt="Gráfico de Quadrantes">
+        `;
+
+        const response_imputacao = await fetch('http://localhost:8000/imputar', {
+            method: 'POST',
+            body: formData2
+        });
+
+        if (!response_imputacao.ok) {
+            throw new Error('Erro ao chamar API de imputação');
+        }
+
+        const blob = await response_imputacao.blob();
+
+        const url = window.URL.createObjectURL(blob);
+
+        const linkDownload = document.createElement('a');
+        linkDownload.href = url;
+
+        linkDownload.download = 'imputado_resultado.csv';
+
+        document.body.appendChild(linkDownload);
+        linkDownload.click();
+
+        linkDownload.remove();
+        window.URL.revokeObjectURL(url);
+
+        setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 500);
+
+
+
+    } catch (err) {
+        console.error(err);
+        alert("Erro ao processar arquivo: " + err.message);
+    }
+});
+</script>
+</body>
+</html>

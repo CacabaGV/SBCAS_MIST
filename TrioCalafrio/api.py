@@ -5,10 +5,19 @@ import io
 import base64
 from fastapi.responses import FileResponse, JSONResponse
 import matplotlib.pyplot as plt
+from fastapi.middleware.cors import CORSMiddleware
 
 from sbcas_imputacao.benchmarking.experiment_runner import ExperimentRunner
 
 app = FastAPI(title="API de Imputação de Dados")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # para desenvolvimento
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.post("/imputar")
 async def imputar_dados(
