@@ -19,6 +19,26 @@
       color: #333;
     }
 
+    /* Scrollbar customizada */
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #667eea;
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #764ba2;
+    }
+
     /* Container principal */
     .site-content {
       max-width: 1400px;
@@ -80,9 +100,168 @@
     /* Container do conteúdo */
     .container {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      grid-template-columns: 1fr 3fr 1fr; /* 3 colunas para melhor controle */
       gap: 25px;
       margin-top: 20px;
+    }
+
+    /* Layout específico para cada card */
+    /* Linha 1: Selecionar Arquivo - centralizado e menor */
+    #card1 {
+      grid-column: 2 / 3; /* Apenas coluna central */
+      grid-row: 1;
+      width: 400px;
+    }
+
+    /* Linha 2: Descrição do Banco */
+    #card2 {
+      grid-column: 1 / -1; /* Ocupa toda a largura */
+      grid-row: 2;
+      max-height: 600px;
+    }
+
+    /* Linha 3: Colunas com NaNs */
+    #card3 {
+      grid-column: 1 / -1; /* Ocupa toda a largura */
+      grid-row: 3;
+    }
+
+    /* Linha 4: Seleção Quadrantes (esquerda) - menor */
+    #card4 {
+      grid-column: 1 / 2; /* Primeira coluna */
+      grid-row: 4;
+      width: 350px;
+    }
+
+    /* Linha 4: Informação Quadrantes (direita) - mais ênfase */
+    #card5 {
+      grid-column: 2 / -1; /* Segunda e terceira colunas - maior */
+      grid-row: 4;
+      min-height: 400px;
+      width: 850px;
+    }
+
+    /* Linha 5: Imputação */
+    #card6 {
+      grid-column: 2 / 3; /* Ocupa toda a largura */
+      grid-row: 5;
+      width: 500px;
+    }
+
+    /* Estilos específicos para descrição do banco */
+    #card2 .description-content {
+      max-height: 500px;
+      overflow-y: auto;
+      overflow-x: auto;
+    }
+
+    #card2 .column-info {
+      background: #f8f9ff;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      border-left: 4px solid #667eea;
+    }
+
+    #card2 .column-info h3 {
+      color: #667eea;
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+    }
+
+    #card2 .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    #card2 .stat-item {
+      background: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+    }
+
+    #card2 .stat-label {
+      font-weight: 600;
+      color: #666;
+      display: block;
+      font-size: 0.85rem;
+    }
+
+    #card2 .stat-value {
+      color: #333;
+      font-size: 1rem;
+      margin-top: 4px;
+    }
+
+    /* Estilos para colunas com NaNs - layout horizontal */
+    #card3 .nans-container {
+      overflow-x: auto;
+    }
+
+    #card3 .nans-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    #card3 .nan-item {
+      background: #f8f9ff;
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+      border: 2px solid #e0e0e0;
+      transition: all 0.3s;
+    }
+
+    #card3 .nan-item:hover {
+      border-color: #667eea;
+      transform: translateY(-2px);
+    }
+
+    #card3 .nan-column-name {
+      font-weight: 600;
+      color: #667eea;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+    }
+
+    #card3 .nan-count {
+      font-size: 1rem;
+      font-weight: bold;
+      color: #333;
+      margin: 5px 0;
+    }
+
+    #card3 .nan-percentage {
+      color: #666;
+      font-size: 0.7rem;
+    }
+
+    /* Estilos para informação dos quadrantes */
+    #card5 .quadrant-content {
+      max-height: 500px;
+      overflow-y: auto;
+    }
+
+    #card5 img {
+      max-width: 75%;
+      height: auto;
+      border-radius: 8px;
+      margin: 15px 0;
+    }
+
+    #card5 .quadrant-section {
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    #card5 .quadrant-section:last-child {
+      border-bottom: none;
     }
 
     /* Cards */
@@ -137,6 +316,45 @@
     input[type="text"]:focus, select:focus {
       outline: none;
       border-color: #667eea;
+    }
+
+    /* Estilos para checkboxes */
+    .checkbox-group {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 12px;
+      margin: 15px 0;
+      padding: 15px;
+      background: #f8f9ff;
+      border-radius: 8px;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .checkbox-item:hover {
+      background: white;
+    }
+
+    .checkbox-item input[type="checkbox"] {
+      cursor: pointer;
+      width: 18px;
+      height: 18px;
+      accent-color: #667eea;
+    }
+
+    .checkbox-item label {
+      cursor: pointer;
+      margin: 0;
+      font-size: 0.95rem;
+      flex: 1;
     }
 
     button {
@@ -254,6 +472,11 @@
         grid-template-columns: 1fr;
       }
 
+      /* Todos os cards ocupam toda a largura em mobile */
+      #card1, #card2, #card3, #card4, #card5, #card6 {
+        grid-column: 1 / -1;
+      }
+
       button {
         width: 100%;
       }
@@ -264,6 +487,14 @@
 
       td, th {
         padding: 8px;
+      }
+
+      #card2 .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      #card3 .nans-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
       }
     }
 
@@ -314,7 +545,7 @@
       <div class="card" id="card1">
         <h2>📁 Selecione Arquivo</h2>
         <div class="form-upload" id="form_describe">
-          <input type="file" id="input_file" accept=".csv,.xlsx,.xls">
+          <input type="file" id="input_file" accept=".csv,.xlsx,.xls,.parquet">
           <button id="btn_selecao_dados" type="button">Enviar Arquivo</button>
         </div>
       </div>
@@ -334,8 +565,10 @@
       <!-- Card 4 - Features para Quadrantes -->
       <div class="card" id="card4">
         <h2>📐 Seleção para Quadrantes</h2>
-        <p>Selecione as features (separadas por vírgula):</p>
-        <input type="text" id="texto1" name="texto1" placeholder="ex: idade,renda,score">
+        <p>Selecione as features:</p>
+        <div id="checkbox_quadrantes" class="checkbox-group">
+          <p class="placeholder" style="grid-column: 1/-1;">Enviando arquivo para carregar features...</p>
+        </div>
         <button id="btn_selecao_quadrantes" type="button">Gerar Quadrantes</button>
       </div>
 
@@ -351,18 +584,22 @@
         <div class="form-upload">
           <p>Escolha o modelo:</p>
           <select id="meuSelect">
-            <option value="tabpfn">TABPFN (Recomendado)</option>
-            <option value="média">Média (Mean)</option>
+            <option value="tabpfn">TABPFN </option>
+            <option value="média">Média </option>
             <option value="mice">MICE</option>
             <option value="knn">KNN</option>
             <option value="missforest">MissForest</option>
           </select>
           
-          <p>Features para imputar:</p>
-          <input type="text" id="texto2" name="texto2" placeholder="feature_1, feature_2...">
+          <p style="margin-top: 15px;">Features para imputar:</p>
+          <div id="checkbox_imputar" class="checkbox-group">
+            <p class="placeholder" style="grid-column: 1/-1;">Enviando arquivo para carregar features...</p>
+          </div>
           
-          <p>Features para ignorar:</p>
-          <input type="text" id="texto3" name="texto3" placeholder="feature_1, feature_2...">
+          <p style="margin-top: 15px;">Features para ignorar:</p>
+          <div id="checkbox_ignorar" class="checkbox-group">
+            <p class="placeholder" style="grid-column: 1/-1;">Enviando arquivo para carregar features...</p>
+          </div>
           
           <button id="btn_selecao_modelo" type="button">Executar Imputação</button>
         </div>
@@ -372,6 +609,7 @@
 
   <script>
     let uploadedFile = null;
+    let allFeatures = []; // Armazenar todas as features
 
     // Função para mostrar alertas customizados
     function showAlert(message, type = 'info') {
@@ -394,6 +632,31 @@
         button.disabled = false;
         button.innerHTML = button.getAttribute('data-original-text');
       }
+    }
+
+    // Função para gerar checkboxes
+    function generateCheckboxes(containerId, features, defaultChecked = []) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+      
+      features.forEach(feature => {
+        const isChecked = defaultChecked.includes(feature);
+        const checkboxDiv = document.createElement('div');
+        checkboxDiv.className = 'checkbox-item';
+        
+        checkboxDiv.innerHTML = `
+          <input type="checkbox" id="check_${containerId}_${feature}" value="${feature}" ${isChecked ? 'checked' : ''}>
+          <label for="check_${containerId}_${feature}">${feature}</label>
+        `;
+        
+        container.appendChild(checkboxDiv);
+      });
+    }
+
+    // Função para obter features selecionadas
+    function getSelectedCheckboxes(containerId) {
+      const checkboxes = document.querySelectorAll(`#${containerId} input[type="checkbox"]:checked`);
+      return Array.from(checkboxes).map(cb => cb.value);
     }
 
     // Salvar texto original dos botões
@@ -427,23 +690,39 @@
 
         const data = await response.json();
 
-        // Atualizar Card 2
+        // Atualizar Card 2 com layout melhorado
         let html = `
-          <div style="overflow-x: auto;">
-            <p><strong>Informações Gerais</strong></p>
-            <p>📊 ${data.shape.rows} linhas | ${data.shape.cols} colunas</p>
-            <p><strong>Descrição Estatística</strong></p>
-            <table>
+          <div class="description-content">
+            <div style="background: #667eea; color: white; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+              <h3 style="margin: 0; color: white;">📊 Informações Gerais</h3>
+              <p style="margin: 10px 0 0 0; font-size: 1.1rem;">${data.shape.rows} linhas × ${data.shape.cols} colunas</p>
+            </div>
         `;
         
         for (const col in data.describe) {
-          html += `<tr><td colspan="2"><strong>${col}</strong></td></tr>`;
+          html += `
+            <div class="column-info">
+              <h3>📌 ${col}</h3>
+              <div class="stats-grid">
+          `;
+          
           for (const stat in data.describe[col]) {
             const value = data.describe[col][stat];
-            html += `<tr><td>${stat}</td><td>${typeof value === 'number' ? value.toFixed(4) : value}</td></tr>`;
+            const displayValue = typeof value === 'number' ? value.toFixed(4) : value;
+            html += `
+              <div class="stat-item">
+                <span class="stat-label">${stat}</span>
+                <div class="stat-value">${displayValue}</div>
+              </div>
+            `;
           }
+          
+          html += `
+              </div>
+            </div>
+          `;
         }
-        html += '</table></div>';
+        html += '</div>';
         document.getElementById('card2').innerHTML = `<h2>📊 Descrição do Banco</h2>` + html;
 
         // Atualizar Card 3
@@ -459,17 +738,32 @@
 
         const data2 = await response2.json();
 
-        let html2 = `<div style="overflow-x: auto;"><table>
-          <tr><th>Coluna</th><th>Valores NaN</th><th>%</th></tr>`;
+        let html2 = `
+          <div class="nans-container">
+            <p style="margin-bottom: 15px;"><strong>Total de colunas com valores ausentes: ${Object.keys(data2).length}</strong></p>
+            <div class="nans-grid">
+        `;
         
         const totalRows = data.shape.rows;
         for (const col in data2) {
           const nanCount = data2[col];
           const percentage = ((nanCount / totalRows) * 100).toFixed(2);
-          html2 += `<tr><td>${col}</td><td>${nanCount}</td><td>${percentage}%</td></tr>`;
+          html2 += `
+            <div class="nan-item">
+              <div class="nan-column-name">${col}</div>
+              <div class="nan-count">${nanCount}</div>
+              <div class="nan-percentage">${percentage}% ausentes</div>
+            </div>
+          `;
         }
-        html2 += '</table></div>';
+        html2 += '</div></div>';
         document.getElementById('card3').innerHTML = `<h2>🔍 Colunas com NaNs</h2>` + html2;
+
+        // Atualizar Card 4 e Card 6 com checkboxes
+        allFeatures = Object.keys(data.describe);
+        generateCheckboxes('checkbox_quadrantes', allFeatures);
+        generateCheckboxes('checkbox_imputar', allFeatures);
+        generateCheckboxes('checkbox_ignorar', allFeatures);
         
         showAlert('Arquivo processado com sucesso!', 'success');
 
@@ -484,7 +778,7 @@
     // Card 4 - Quadrantes
     document.getElementById('btn_selecao_quadrantes').addEventListener('click', async function () {
       const file = uploadedFile;
-      const featuresQuadr = document.getElementById('texto1').value;
+      const features = getSelectedCheckboxes('checkbox_quadrantes');
       const button = this;
 
       if (!file) { 
@@ -492,13 +786,12 @@
         return; 
       }
       
-      if (!featuresQuadr.trim()) { 
-        showAlert('Informe ao menos uma feature!', 'error'); 
+      if (features.length === 0) { 
+        showAlert('Selecione ao menos uma feature!', 'error'); 
         return; 
       }
 
       setLoading(button, true);
-      const features = featuresQuadr.split(',').map(f => f.trim());
       const params = new URLSearchParams();
       features.forEach(f => params.append('lista_features', f));
 
@@ -515,14 +808,14 @@
 
         const data3 = await response3.json();
 
-        let html3 = '<div style="max-height: 500px; overflow-y: auto;">';
+        let html3 = '<div class="quadrant-content">';
         for (const item of data3) {
-          html3 += `<div style="margin-bottom: 30px;">`;
-          html3 += `<h3 style="color: #667eea;">📊 ${item.feature}</h3>`;
-          html3 += `<img src="data:image/png;base64,${item.imagem_base64}" style="max-width:100%; border-radius: 8px; margin: 15px 0;"><br>`;
+          html3 += `<div class="quadrant-section">`;
+          html3 += `<h3 style="color: #667eea; font-size: 1.3rem; margin-bottom: 15px;">📊 ${item.feature}</h3>`;
+          html3 += `<img src="data:image/png;base64,${item.imagem_base64}" alt="Gráfico ${item.feature}">`;
           
           if (item.erro_medio && Object.keys(item.erro_medio).length > 0) {
-            html3 += `<p><strong>Erro Médio por Método:</strong></p>`;
+            html3 += `<p style="font-weight: 600; margin-top: 20px; margin-bottom: 10px;">Erro Médio por Método:</p>`;
             html3 += `<div style="overflow-x: auto;"><table>`;
 
             const metodos = Object.keys(item.erro_medio);
@@ -560,8 +853,8 @@
     // Card 6 - Imputação
     document.getElementById('btn_selecao_modelo').addEventListener('click', async function () {
       const file = uploadedFile;
-      const featuresImputar = document.getElementById('texto2').value;
-      const featuresIgnorar = document.getElementById('texto3').value;
+      const featuresImputarList = getSelectedCheckboxes('checkbox_imputar');
+      const featuresIgnorarList = getSelectedCheckboxes('checkbox_ignorar');
       const metodo = document.getElementById('meuSelect').value;
       const button = this;
 
@@ -570,8 +863,8 @@
         return; 
       }
 
-      if (!featuresImputar.trim()) {
-        showAlert('Informe as features para imputar!', 'error');
+      if (featuresImputarList.length === 0) {
+        showAlert('Selecione ao menos uma feature para imputar!', 'error');
         return;
       }
 
@@ -579,10 +872,10 @@
       const formData3 = new FormData();
       formData3.append('arquivo', file);
       formData3.append('metodo', metodo);
-      formData3.append('features_a_imputar', featuresImputar);
+      formData3.append('features_a_imputar', featuresImputarList.join(','));
       
-      if (featuresIgnorar.trim()) {
-        formData3.append('ignorar', featuresIgnorar);
+      if (featuresIgnorarList.length > 0) {
+        formData3.append('ignorar', featuresIgnorarList.join(','));
       }
 
       try {
