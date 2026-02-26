@@ -1,8 +1,0 @@
-venv
-__pycache__
-.ipynb_checkpoints
-.git
-Data
-script.ipynb
-__pycache__/
-*.pyc

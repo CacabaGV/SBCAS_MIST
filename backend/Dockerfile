@@ -7,10 +7,9 @@ COPY requirements.txt .
 
 # executa dependencias, na hora que faz o build da imagem
 RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY sbcas_imputacao ./sbcas_imputacao
-COPY api.py .
+COPY . .
 
 EXPOSE 8000
 
