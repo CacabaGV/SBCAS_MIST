@@ -14,7 +14,7 @@
 
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: #fdfdfd;
       min-height: 100vh;
       color: #333;
     }
@@ -35,9 +35,6 @@
       border-radius: 10px;
     }
 
-    ::-webkit-scrollbar-thumb:hover {
-      background: #764ba2;
-    }
 
     /* Container principal */
     .site-content {
@@ -77,12 +74,12 @@
     .logo p {
       font-size: 1.5rem;
       font-weight: 600;
-      color: #667eea;
+      color: #000;
       margin: 0;
     }
 
     .botao a {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: #667eea;
       color: white;
       text-decoration: none;
       padding: 12px 30px;
@@ -108,9 +105,8 @@
     /* Layout específico para cada card */
     /* Linha 1: Selecionar Arquivo - centralizado e menor */
     #card1 {
-      grid-column: 2 / 3; /* Apenas coluna central */
+      grid-column: 1 / -1; /* Apenas coluna central */
       grid-row: 1;
-      width: 400px;
     }
 
     /* Linha 2: Descrição do Banco */
@@ -130,7 +126,6 @@
     #card4 {
       grid-column: 1 / 2; /* Primeira coluna */
       grid-row: 4;
-      width: 350px;
     }
 
     /* Linha 4: Informação Quadrantes (direita) - mais ênfase */
@@ -138,15 +133,27 @@
       grid-column: 2 / -1; /* Segunda e terceira colunas - maior */
       grid-row: 4;
       min-height: 400px;
-      width: 850px;
     }
 
     /* Linha 5: Imputação */
     #card6 {
-      grid-column: 2 / 3; /* Ocupa toda a largura */
+      grid-column: 1 / -1; /* Ocupa toda a largura */
       grid-row: 5;
-      width: 500px;
     }
+
+    /* Layout horizontal no Card 6 */
+    #card6 .checks-container {
+      display: flex;
+      gap: 20px;              /* espaço entre as duas divs */
+      align-items: flex-start;
+    }
+
+    #card6 .primeiro_check,
+    #card6 .segundo_check,
+    #card6 .escolher_modelo {
+      flex: 1;                /* ambas ocupam o mesmo tamanho */
+    }
+
 
     /* Estilos específicos para descrição do banco */
     #card2 .description-content {
@@ -357,8 +364,52 @@
       flex: 1;
     }
 
+    .upload-area {
+      border: 2px dashed #cbd5e1;
+      border-radius: 12px;
+      padding: 50px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: #fbfdff;
+    }
+
+    .upload-area:hover {
+      border-color: #667eea;
+      background: #f0f4ff;
+    }
+
+    .upload-area.dragover {
+      background: #e8ecff;
+    }
+
+    .upload-content {
+      pointer-events: none;
+    }
+
+    .upload-icon {
+      font-size: 40px;
+      color: #94a3b8;
+      margin-bottom: 10px;
+    }
+
+    .upload-content p {
+      color: #555;
+      font-size: 1rem;
+    }
+
+    .file-name {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 6px 14px;
+      background: #e0edff;
+      color: #1d4ed8;
+      border-radius: 999px;
+      font-size: 0.9rem;
+    }
+
     button {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: #667eea;
       color: white;
       border: none;
       padding: 12px 25px;
@@ -367,7 +418,9 @@
       font-weight: 500;
       cursor: pointer;
       transition: transform 0.3s, box-shadow 0.3s;
-      align-self: flex-start;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     button:hover {
@@ -536,7 +589,7 @@
         <p class="inter">MIST Saúde</p>
       </div>
       <div class="botao">
-        <a href="interface_API.html">Execute já</a>
+        <a href="index.html">Home Page</a>
       </div>
     </header>
 
@@ -545,9 +598,22 @@
       <div class="card" id="card1">
         <h2>📁 Selecione Arquivo</h2>
         <div class="form-upload" id="form_describe">
-          <input type="file" id="input_file" accept=".csv,.xlsx,.xls,.parquet">
-          <button id="btn_selecao_dados" type="button">Enviar Arquivo</button>
+
+        <div class="upload-area" id="uploadArea">
+          <input type="file" id="input_file" accept=".csv,.xlsx,.xls,.parquet" hidden>
+
+          <div class="upload-content">
+            <div class="upload-icon">☁️</div>
+            <p>Clique ou arraste seu arquivo aqui</p>
+            <span id="fileName" class="file-name"></span>
+          </div>
         </div>
+
+        <button id="btn_selecao_dados" type="button">
+          Enviar Arquivo
+        </button>
+
+      </div>
       </div>
 
       <!-- Card 2 - Descrição -->
@@ -582,32 +648,86 @@
       <div class="card" id="card6">
         <h2>🔄 Imputação de Dados</h2>
         <div class="form-upload">
-          <p>Escolha o modelo:</p>
-          <select id="meuSelect">
-            <option value="tabpfn">TABPFN </option>
-            <option value="média">Média </option>
-            <option value="mice">MICE</option>
-            <option value="knn">KNN</option>
-            <option value="missforest">MissForest</option>
-          </select>
           
-          <p style="margin-top: 15px;">Features para imputar:</p>
-          <div id="checkbox_imputar" class="checkbox-group">
-            <p class="placeholder" style="grid-column: 1/-1;">Enviando arquivo para carregar features...</p>
+          <div class="checks-container">
+            <div class="primeiro_check">
+              <p style="margin-top: 15px;">Features para imputar:</p>
+              <div id="checkbox_imputar" class="checkbox-group">
+                <p class="placeholder" style="grid-column: 1/-1;">Enviando arquivo para carregar features...</p>
+              </div>
+            </div>
+            <div class="segundo_check">
+              <p style="margin-top: 15px;">Features para ignorar:</p>
+              <div id="checkbox_ignorar" class="checkbox-group">
+                <p class="placeholder" style="grid-column: 1/-1;">Enviando arquivo para carregar features...</p>
+              </div>
+            </div>
+
+            <div class="escolher_modelo">
+
+            <b>Método de Imputação</b>
+            <select id="meuSelect">
+              <option value="tabpfn">TABPFN </option>
+              <option value="média">Média </option>
+              <option value="mice">MICE</option>
+              <option value="knn">KNN</option>
+              <option value="missforest">MissForest</option>
+            </select>
+            <p style="font-size: 80%;">Features selecionadas como 'Alvo' terão seus NaNs substituídos pelo valor do método escolhido. Features 'Excluídas' serão ignoradas.</p>
+            <br><br><br>
+
+            <button id="btn_selecao_modelo" type="button">Aplicar Imputação e Baixar CSV</button>
+            </div>
+
           </div>
+
           
-          <p style="margin-top: 15px;">Features para ignorar:</p>
-          <div id="checkbox_ignorar" class="checkbox-group">
-            <p class="placeholder" style="grid-column: 1/-1;">Enviando arquivo para carregar features...</p>
-          </div>
-          
-          <button id="btn_selecao_modelo" type="button">Executar Imputação</button>
+
         </div>
       </div>
     </div>
   </div>
 
   <script>
+    const uploadArea = document.getElementById("uploadArea");
+    const fileInput = document.getElementById("input_file");
+    const fileName = document.getElementById("fileName");
+
+    // Clique abre seletor
+    uploadArea.addEventListener("click", () => {
+      fileInput.click();
+    });
+
+    // Quando seleciona pelo input
+    fileInput.addEventListener("change", () => {
+      if (fileInput.files.length > 0) {
+        fileName.textContent = fileInput.files[0].name;
+      }
+    });
+
+    // Drag over
+    uploadArea.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      uploadArea.classList.add("dragover");
+    });
+
+    // Drag leave
+    uploadArea.addEventListener("dragleave", () => {
+      uploadArea.classList.remove("dragover");
+    });
+
+    // Drop
+    uploadArea.addEventListener("drop", (e) => {
+      e.preventDefault();
+      uploadArea.classList.remove("dragover");
+
+      const files = e.dataTransfer.files;
+      if (files.length > 0) {
+        fileInput.files = files; // mantém compatibilidade com sua lógica
+        fileName.textContent = files[0].name;
+      }
+    });
+
     let uploadedFile = null;
     let allFeatures = []; // Armazenar todas as features
 
