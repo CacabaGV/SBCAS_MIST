@@ -3,9 +3,7 @@ Este repositório é para que aqueles que desejarem baixar nossa ferramenta MIST
 
 ## Passos para rodar a ferramente:
 
- - TabPFN
-O modelo TabPFN v2.5 é um modelo "gated" no HuggingFace que requer autenticação para download. Sem a autenticação, você receberá um erro, os passos abaixo são necessários para a execução sem erro:
-```
+ - TabPFN: O modelo TabPFN v2.5 é um modelo "gated" no HuggingFace que requer autenticação para download. Sem a autenticação, você receberá um erro, os passos abaixo são necessários para a execução sem erro:
 
 ### Passo 1: Aceitar os Termos na HuggingFace
 
@@ -23,7 +21,7 @@ O modelo TabPFN v2.5 é um modelo "gated" no HuggingFace que requer autenticaç�
 ### Passo 3: Configurar o Environment
 
 #### crie um arquivo `.env` na raiz do projeto:
-```
+```bash
 HF_TOKEN=seu_token_aqui
 ```
 
