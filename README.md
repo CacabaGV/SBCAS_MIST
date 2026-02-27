@@ -1,5 +1,5 @@
 # MIST_Download
-Este repositório é para que aqueles que desejarem baixar nossa ferramenta MIST-Saúde, que será apresentada na SBCAS 2026
+Este repositório é para que aqueles que desejarem baixar nossa ferramenta MIST-Saúde, que será apresentada na SBCAS 2026.
 
 ## Passos para rodar a ferramente:
 
@@ -20,12 +20,12 @@ Este repositório é para que aqueles que desejarem baixar nossa ferramenta MIST
 
 ### Passo 3: Configurar o Environment
 
-#### crie um arquivo `.env` na raiz do projeto:
+#### crie um arquivo `.env` na raiz do projeto e coloque no arquivo:
 ```bash
 HF_TOKEN=seu_token_aqui
 ```
 
-Depois carregue as variáveis:
+Depois carregue as variáveis no terminal:
 ```bash
 source .env  # Linux/Mac
 set -a; source .env; set +a  # Se usar bash
@@ -47,4 +47,4 @@ O token será passado automaticamente durante o build e será disponível para o
  ```bash
  docker compose down
  ```
- para parar e remover os containers.
+ para parar a execução e remover os containers.
