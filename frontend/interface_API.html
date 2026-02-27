@@ -6,11 +6,7 @@
   <title>MIST Saúde - Análise de Dados</title>
   <style>
     /* Reset e estilos globais */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -20,23 +16,10 @@
     }
 
     /* Scrollbar customizada */
-    ::-webkit-scrollbar {
-      width: 10px;
-      height: 10px;
-    }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb { background: #667eea; border-radius: 10px; }
 
-    ::-webkit-scrollbar-track {
-      background: #f1f1f1;
-      border-radius: 10px;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: #667eea;
-      border-radius: 10px;
-    }
-
-
-    /* Container principal */
     .site-content {
       max-width: 1400px;
       margin: 0 auto;
@@ -53,389 +36,63 @@
       justify-content: space-between;
       align-items: center;
       box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-      flex-wrap: wrap;
-      gap: 20px;
     }
 
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
+    .logo { display: flex; align-items: center; gap: 15px; }
+    .logo img { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 3px solid #667eea; }
+    .logo p { font-size: 1.5rem; font-weight: 600; color: #000; }
 
-    .logo img {
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid #667eea;
-    }
-
-    .logo p {
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: #000;
-      margin: 0;
-    }
-
-    .botao a {
+    .botao-home {
       background: #667eea;
       color: white;
       text-decoration: none;
-      padding: 12px 30px;
+      padding: 10px 25px;
       border-radius: 25px;
       font-weight: 500;
-      transition: transform 0.3s, box-shadow 0.3s;
-      display: inline-block;
-    }
-
-    .botao a:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
-    }
-
-    /* Container do conteúdo */
-    .container {
-      display: grid;
-      grid-template-columns: 1fr 3fr 1fr; /* 3 colunas para melhor controle */
-      gap: 25px;
-      margin-top: 20px;
-    }
-
-    /* Layout específico para cada card */
-    /* Linha 1: Selecionar Arquivo - centralizado e menor */
-    #card1 {
-      grid-column: 1 / -1; /* Apenas coluna central */
-      grid-row: 1;
-    }
-
-    /* Linha 2: Descrição do Banco */
-    #card2 {
-      grid-column: 1 / -1; /* Ocupa toda a largura */
-      grid-row: 2;
-      max-height: 600px;
-    }
-
-    /* Linha 3: Colunas com NaNs */
-    #card3 {
-      grid-column: 1 / -1; /* Ocupa toda a largura */
-      grid-row: 3;
-    }
-
-    /* Linha 4: Seleção Quadrantes (esquerda) - menor */
-    #card4 {
-      grid-column: 1 / 2; /* Primeira coluna */
-      grid-row: 4;
-    }
-
-    /* Linha 4: Informação Quadrantes (direita) - mais ênfase */
-    #card5 {
-      grid-column: 2 / -1; /* Segunda e terceira colunas - maior */
-      grid-row: 4;
-      min-height: 400px;
-    }
-
-    /* Linha 5: Imputação */
-    #card6 {
-      grid-column: 1 / -1; /* Ocupa toda a largura */
-      grid-row: 5;
-    }
-
-    /* Layout horizontal no Card 6 */
-    #card6 .checks-container {
-      display: flex;
-      gap: 20px;              /* espaço entre as duas divs */
-      align-items: flex-start;
-    }
-
-    #card6 .primeiro_check,
-    #card6 .segundo_check,
-    #card6 .escolher_modelo {
-      flex: 1;                /* ambas ocupam o mesmo tamanho */
-    }
-
-
-    /* Estilos específicos para descrição do banco */
-    #card2 .description-content {
-      max-height: 500px;
-      overflow-y: auto;
-      overflow-x: auto;
-    }
-
-    #card2 .column-info {
-      background: #f8f9ff;
-      padding: 15px;
-      margin-bottom: 15px;
-      border-radius: 8px;
-      border-left: 4px solid #667eea;
-    }
-
-    #card2 .column-info h3 {
-      color: #667eea;
-      font-size: 1.1rem;
-      margin-bottom: 10px;
-    }
-
-    #card2 .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    #card2 .stat-item {
-      background: white;
-      padding: 8px 12px;
-      border-radius: 6px;
-      font-size: 0.9rem;
-    }
-
-    #card2 .stat-label {
-      font-weight: 600;
-      color: #666;
-      display: block;
-      font-size: 0.85rem;
-    }
-
-    #card2 .stat-value {
-      color: #333;
-      font-size: 1rem;
-      margin-top: 4px;
-    }
-
-    /* Estilos para colunas com NaNs - layout horizontal */
-    #card3 .nans-container {
-      overflow-x: auto;
-    }
-
-    #card3 .nans-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 10px;
-      margin-top: 15px;
-    }
-
-    #card3 .nan-item {
-      background: #f8f9ff;
-      padding: 10px;
-      border-radius: 8px;
-      text-align: center;
-      border: 2px solid #e0e0e0;
       transition: all 0.3s;
     }
+    .botao-home:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4); }
 
-    #card3 .nan-item:hover {
-      border-color: #667eea;
-      transform: translateY(-2px);
+    /* Layout Grids */
+    .container {
+      display: grid;
+      grid-template-columns: 1fr 3fr;
+      gap: 25px;
     }
 
-    #card3 .nan-column-name {
-      font-weight: 600;
-      color: #667eea;
-      margin-bottom: 8px;
-      font-size: 0.95rem;
-    }
+    #card1, #card2, #card6 { grid-column: 1 / -1; }
+    #card4 { grid-column: 1 / 2; }
+    #card5 { grid-column: 2 / 3; }
 
-    #card3 .nan-count {
-      font-size: 1rem;
-      font-weight: bold;
-      color: #333;
-      margin: 5px 0;
-    }
-
-    #card3 .nan-percentage {
-      color: #666;
-      font-size: 0.7rem;
-    }
-
-    /* Estilos para informação dos quadrantes */
-    #card5 .quadrant-content {
-      max-height: 500px;
-      overflow-y: auto;
-    }
-
-    #card5 img {
-      max-width: 75%;
-      height: auto;
-      border-radius: 8px;
-      margin: 15px 0;
-    }
-
-    #card5 .quadrant-section {
-      margin-bottom: 30px;
-      padding-bottom: 20px;
-      border-bottom: 2px solid #f0f0f0;
-    }
-
-    #card5 .quadrant-section:last-child {
-      border-bottom: none;
-    }
-
-    /* Cards */
     .card {
       background: white;
       border-radius: 15px;
       padding: 25px;
       box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-      transition: transform 0.3s, box-shadow 0.3s;
-      display: flex;
-      flex-direction: column;
       height: fit-content;
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 50px rgba(0,0,0,0.15);
     }
 
     .card h2 {
       color: #667eea;
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       margin-bottom: 20px;
       padding-bottom: 10px;
       border-bottom: 2px solid #f0f0f0;
     }
 
-    /* Formulários */
-    .form-upload {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-
-    input[type="file"] {
-      padding: 10px;
-      border: 2px dashed #667eea;
-      border-radius: 10px;
-      background: #f8f9ff;
-      cursor: pointer;
-    }
-
-    input[type="text"], select {
-      padding: 12px;
-      border: 1px solid #e0e0e0;
+    /* Tabela de Dados Ausentes e Estatísticas */
+    .table-container {
+      overflow-x: auto;
+      max-height: 500px;
       border-radius: 8px;
-      font-size: 1rem;
-      transition: border-color 0.3s;
-      width: 100%;
+      border: 1px solid #eee;
     }
 
-    input[type="text"]:focus, select:focus {
-      outline: none;
-      border-color: #667eea;
-    }
-
-    /* Estilos para checkboxes */
-    .checkbox-group {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 12px;
-      margin: 15px 0;
-      padding: 15px;
-      background: #f8f9ff;
-      border-radius: 8px;
-    }
-
-    .checkbox-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-
-    .checkbox-item:hover {
-      background: white;
-    }
-
-    .checkbox-item input[type="checkbox"] {
-      cursor: pointer;
-      width: 18px;
-      height: 18px;
-      accent-color: #667eea;
-    }
-
-    .checkbox-item label {
-      cursor: pointer;
-      margin: 0;
-      font-size: 0.95rem;
-      flex: 1;
-    }
-
-    .upload-area {
-      border: 2px dashed #cbd5e1;
-      border-radius: 12px;
-      padding: 50px 20px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      background: #fbfdff;
-    }
-
-    .upload-area:hover {
-      border-color: #667eea;
-      background: #f0f4ff;
-    }
-
-    .upload-area.dragover {
-      background: #e8ecff;
-    }
-
-    .upload-content {
-      pointer-events: none;
-    }
-
-    .upload-icon {
-      font-size: 40px;
-      color: #94a3b8;
-      margin-bottom: 10px;
-    }
-
-    .upload-content p {
-      color: #555;
-      font-size: 1rem;
-    }
-
-    .file-name {
-      display: inline-block;
-      margin-top: 15px;
-      padding: 6px 14px;
-      background: #e0edff;
-      color: #1d4ed8;
-      border-radius: 999px;
-      font-size: 0.9rem;
-    }
-
-    button {
-      background: #667eea;
-      color: white;
-      border: none;
-      padding: 12px 25px;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: transform 0.3s, box-shadow 0.3s;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
-    }
-
-    /* Tabelas */
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 15px;
+      font-size: 0.9rem;
       background: white;
-      border-radius: 10px;
-      overflow: hidden;
     }
 
     th {
@@ -443,6 +100,9 @@
       color: white;
       padding: 12px;
       text-align: left;
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
 
     td {
@@ -450,597 +110,348 @@
       border-bottom: 1px solid #f0f0f0;
     }
 
-    tr:last-child td {
-      border-bottom: none;
+    tr:hover td { background: #f8f9ff; }
+
+    /* Estilização dos NaNs */
+    .highlight-nan {
+      background-color: #fff5f5 !important;
+      color: #e53e3e;
+      font-weight: bold;
+      text-align: center;
+      border-left: 4px solid #feb2b2;
     }
 
-    tr:hover td {
-      background: #f8f9ff;
+    .nan-zero {
+      color: #cbd5e0;
+      text-align: center;
     }
 
-    /* Imagens nos cards */
-    .card img {
-      max-width: 100%;
-      height: auto;
+    .nan-percentage {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: normal;
+      opacity: 0.8;
+    }
+
+    /* Formulários e Upload */
+    .upload-area {
+      border: 2px dashed #cbd5e1;
+      border-radius: 12px;
+      padding: 40px;
+      text-align: center;
+      cursor: pointer;
+      background: #fbfdff;
+      transition: all 0.3s;
+    }
+    .upload-area:hover { border-color: #667eea; background: #f0f4ff; }
+
+    button {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 12px 25px;
       border-radius: 8px;
-      margin: 15px 0;
-      border: 1px solid #e0e0e0;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s;
+    }
+    button:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4); }
+    button:disabled { background: #ccc; cursor: not-allowed; }
+
+    .checkbox-group {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 10px;
+      padding: 15px;
+      background: #f8f9ff;
+      border-radius: 8px;
+      max-height: 300px;
+      overflow-y: auto;
     }
 
-    /* Mensagens de alerta customizadas */
-    .alert {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: white;
-      color: #333;
-      padding: 15px 25px;
-      border-radius: 10px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-      border-left: 4px solid #667eea;
-      z-index: 1000;
-      animation: slideIn 0.3s ease;
-    }
+    .placeholder { color: #999; font-style: italic; text-align: center; padding: 20px; }
 
-    @keyframes slideIn {
-      from {
-        transform: translateX(100%);
-        opacity: 0;
-      }
-      to {
-        transform: translateX(0);
-        opacity: 1;
-      }
-    }
-
-    /* Loading spinner */
     .loading {
       display: inline-block;
-      width: 20px;
-      height: 20px;
+      width: 18px;
+      height: 18px;
       border: 3px solid #f3f3f3;
       border-top: 3px solid #667eea;
       border-radius: 50%;
       animation: spin 1s linear infinite;
-      margin-left: 10px;
+      vertical-align: middle;
+      margin-left: 8px;
     }
 
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
     /* Responsividade */
-    @media (max-width: 768px) {
-      header {
-        flex-direction: column;
-        text-align: center;
-      }
-
-      .logo {
-        flex-direction: column;
-      }
-
-      .container {
-        grid-template-columns: 1fr;
-      }
-
-      /* Todos os cards ocupam toda a largura em mobile */
-      #card1, #card2, #card3, #card4, #card5, #card6 {
-        grid-column: 1 / -1;
-      }
-
-      button {
-        width: 100%;
-      }
-
-      table {
-        font-size: 0.9rem;
-      }
-
-      td, th {
-        padding: 8px;
-      }
-
-      #card2 .stats-grid {
-        grid-template-columns: 1fr;
-      }
-
-      #card3 .nans-grid {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      }
-    }
-
-    @media (max-width: 480px) {
-      .site-content {
-        padding: 10px;
-      }
-
-      .card {
-        padding: 15px;
-      }
-
-      .card h2 {
-        font-size: 1.2rem;
-      }
-
-      .logo p {
-        font-size: 1.2rem;
-      }
-
-      .logo img {
-        width: 50px;
-        height: 50px;
-      }
-
-      table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-      }
+    @media (max-width: 1024px) {
+      .container { grid-template-columns: 1fr; }
+      #card4, #card5 { grid-column: 1 / -1; }
     }
   </style>
 </head>
 <body>
-  <div class="site-content" id="siteContent">
+
+  <div class="site-content">
     <header>
       <div class="logo">
-        <img style="width: 90px; height: 90px;" src="imgs/logo.png" alt="Logo MIST Saúde">
-        <p class="inter">MIST Saúde</p>
+        <p>MIST Saúde</p>
       </div>
-      <div class="botao">
-        <a href="index.html">Home Page</a>
-      </div>
+      <a href="index.html" class="botao-home">Home Page</a>
     </header>
 
     <div class="container">
-      <!-- Card 1 - Upload -->
       <div class="card" id="card1">
         <h2>📁 Selecione Arquivo</h2>
-        <div class="form-upload" id="form_describe">
-
         <div class="upload-area" id="uploadArea">
           <input type="file" id="input_file" accept=".csv,.xlsx,.xls,.parquet" hidden>
-
           <div class="upload-content">
-            <div class="upload-icon">☁️</div>
-            <p>Clique ou arraste seu arquivo aqui</p>
-            <span id="fileName" class="file-name"></span>
+            <p>Clique ou arraste seu arquivo aqui (.csv, .xlsx, .parquet)</p>
+            <span id="fileName" style="font-weight:bold; color:#667eea;"></span>
           </div>
         </div>
-
-        <button id="btn_selecao_dados" type="button">
-          Enviar Arquivo
-        </button>
-
-      </div>
+        <button id="btn_selecao_dados" style="display:block; margin: 20px auto 0;">Enviar Arquivo</button>
       </div>
 
-      <!-- Card 2 - Descrição -->
       <div class="card" id="card2">
-        <h2>📊 Descrição do Banco</h2>
-        <p class="placeholder">Aguardando arquivo...</p>
+        <h2>📊 Descrição do Banco e Dados Ausentes</h2>
+        <div id="info_geral" style="margin-bottom: 15px; font-weight: 500; color: #667eea;"></div>
+        <div id="container_tabela" class="table-container">
+          <p class="placeholder">Aguardando arquivo para gerar estatísticas...</p>
+        </div>
       </div>
 
-      <!-- Card 3 - NaNs -->
-      <div class="card" id="card3">
-        <h2>🔍 Colunas com NaNs</h2>
-        <p class="placeholder">Aguardando arquivo...</p>
-      </div>
-
-      <!-- Card 4 - Features para Quadrantes -->
       <div class="card" id="card4">
         <h2>📐 Seleção para Quadrantes</h2>
-        <p>Selecione as features:</p>
+        <p style="margin-bottom: 10px; font-size: 0.9rem;">Escolha as features para análise visual:</p>
         <div id="checkbox_quadrantes" class="checkbox-group">
-          <p class="placeholder" style="grid-column: 1/-1;">Enviando arquivo para carregar features...</p>
+          <p class="placeholder">Carregue um arquivo primeiro.</p>
         </div>
-        <button id="btn_selecao_quadrantes" type="button">Gerar Quadrantes</button>
+        <button id="btn_selecao_quadrantes" style="margin-top: 15px; width: 100%;">Gerar Quadrantes</button>
       </div>
 
-      <!-- Card 5 - Informação Quadrantes -->
       <div class="card" id="card5">
         <h2>📈 Informação dos Quadrantes</h2>
-        <p class="placeholder">Aguardando análise...</p>
+        <div id="resultado_quadrantes">
+          <p class="placeholder">Os gráficos e tabelas de erro aparecerão aqui.</p>
+        </div>
       </div>
 
-      <!-- Card 6 - Imputação -->
       <div class="card" id="card6">
         <h2>🔄 Imputação de Dados</h2>
-        <div class="form-upload">
-          
-          <div class="checks-container">
-            <div class="primeiro_check">
-              <p style="margin-top: 15px;">Features para imputar:</p>
-              <div id="checkbox_imputar" class="checkbox-group">
-                <p class="placeholder" style="grid-column: 1/-1;">Enviando arquivo para carregar features...</p>
-              </div>
-            </div>
-            <div class="segundo_check">
-              <p style="margin-top: 15px;">Features para ignorar:</p>
-              <div id="checkbox_ignorar" class="checkbox-group">
-                <p class="placeholder" style="grid-column: 1/-1;">Enviando arquivo para carregar features...</p>
-              </div>
-            </div>
-
-            <div class="escolher_modelo">
-
-            <b>Método de Imputação</b>
-            <select id="meuSelect">
-              <option value="tabpfn">TABPFN </option>
-              <option value="média">Média </option>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+          <div>
+            <p>Features para <strong>Imputar</strong>:</p>
+            <div id="checkbox_imputar" class="checkbox-group"></div>
+          </div>
+          <div>
+            <p>Features para <strong>Ignorar</strong>:</p>
+            <div id="checkbox_ignorar" class="checkbox-group"></div>
+          </div>
+          <div>
+            <p>Método e Ação:</p>
+            <select id="meuSelect" style="width:100%; padding:10px; border-radius:8px; margin-bottom:15px; border:1px solid #ddd;">
+              <option value="tabpfn">TABPFN</option>
+              <option value="média">Média</option>
               <option value="mice">MICE</option>
               <option value="knn">KNN</option>
               <option value="missforest">MissForest</option>
             </select>
-            <p style="font-size: 80%;">Features selecionadas como 'Alvo' terão seus NaNs substituídos pelo valor do método escolhido. Features 'Excluídas' serão ignoradas.</p>
-            <br><br><br>
-
-            <button id="btn_selecao_modelo" type="button">Aplicar Imputação e Baixar CSV</button>
-            </div>
-
+            <button id="btn_selecao_modelo" style="width:100%;">Aplicar Imputação e Baixar</button>
           </div>
-
-          
-
         </div>
       </div>
     </div>
   </div>
 
   <script>
-    const uploadArea = document.getElementById("uploadArea");
     const fileInput = document.getElementById("input_file");
-    const fileName = document.getElementById("fileName");
-
-    // Clique abre seletor
-    uploadArea.addEventListener("click", () => {
-      fileInput.click();
-    });
-
-    // Quando seleciona pelo input
-    fileInput.addEventListener("change", () => {
-      if (fileInput.files.length > 0) {
-        fileName.textContent = fileInput.files[0].name;
-      }
-    });
-
-    // Drag over
-    uploadArea.addEventListener("dragover", (e) => {
-      e.preventDefault();
-      uploadArea.classList.add("dragover");
-    });
-
-    // Drag leave
-    uploadArea.addEventListener("dragleave", () => {
-      uploadArea.classList.remove("dragover");
-    });
-
-    // Drop
-    uploadArea.addEventListener("drop", (e) => {
-      e.preventDefault();
-      uploadArea.classList.remove("dragover");
-
-      const files = e.dataTransfer.files;
-      if (files.length > 0) {
-        fileInput.files = files; // mantém compatibilidade com sua lógica
-        fileName.textContent = files[0].name;
-      }
-    });
-
+    const uploadArea = document.getElementById("uploadArea");
+    const fileNameDisplay = document.getElementById("fileName");
     let uploadedFile = null;
-    let allFeatures = []; // Armazenar todas as features
 
-    // Função para mostrar alertas customizados
-    function showAlert(message, type = 'info') {
-      const alert = document.createElement('div');
-      alert.className = 'alert';
-      alert.textContent = message;
-      document.body.appendChild(alert);
-      
-      setTimeout(() => {
-        alert.remove();
-      }, 3000);
-    }
-
-    // Função para mostrar loading em botões
-    function setLoading(button, isLoading) {
-      if (isLoading) {
-        button.disabled = true;
-        button.innerHTML = 'Processando <span class="loading"></span>';
-      } else {
-        button.disabled = false;
-        button.innerHTML = button.getAttribute('data-original-text');
+    // --- Lógica de Upload ---
+    uploadArea.onclick = () => fileInput.click();
+    fileInput.onchange = () => {
+      if (fileInput.files[0]) {
+        uploadedFile = fileInput.files[0];
+        fileNameDisplay.textContent = uploadedFile.name;
       }
+    };
+
+    // --- Lógica Principal de Processamento ---
+    document.getElementById('btn_selecao_dados').addEventListener('click', async function() {
+      if (!uploadedFile) return alert("Por favor, selecione um arquivo.");
+      
+      const btn = this;
+      btn.disabled = true;
+      btn.innerHTML = 'Processando... <span class="loading"></span>';
+
+      const formData = new FormData();
+      formData.append('file', uploadedFile);
+
+      try {
+        // Busca estatísticas
+        const resDesc = await fetch('http://localhost:8000/describe', { method: 'POST', body: formData });
+        const dataDesc = await resDesc.json();
+
+        // Busca NaNs
+        const resNans = await fetch('http://localhost:8000/colunas_nans', { method: 'POST', body: formData });
+        const dataNans = await resNans.json();
+
+        renderizarTabelaMestra(dataDesc, dataNans);
+        popularCheckboxes(Object.keys(dataDesc.describe));
+
+      } catch (err) {
+        console.error(err);
+        alert("Erro ao conectar com o servidor.");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = 'Enviar Arquivo';
+      }
+    });
+
+    function renderizarTabelaMestra(data, nans) {
+      const container = document.getElementById('container_tabela');
+      const infoGeral = document.getElementById('info_geral');
+      const features = Object.keys(data.describe);
+      const rows = data.shape.rows;
+      const cols = data.shape.cols;
+
+      infoGeral.textContent = `Dataset: ${rows} linhas e ${cols} colunas.`;
+
+      // Pega as chaves de estatísticas (mean, std, etc)
+      const statsKeys = Object.keys(data.describe[features[0]]);
+
+      let html = `
+        <table>
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th style="background:#4a5568; text-align:center;">NaNs (Abs / %)</th>
+              ${statsKeys.map(k => `<th>${k}</th>`).join('')}
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      features.forEach(feat => {
+        const count = nans[feat] || 0;
+        const percent = ((count / rows) * 100).toFixed(2);
+        const nanClass = count > 0 ? 'highlight-nan' : 'nan-zero';
+
+        html += `
+          <tr>
+            <td><strong>${feat}</strong></td>
+            <td class="${nanClass}">
+              ${count}
+              <span class="nan-percentage">(${percent}%)</span>
+            </td>
+            ${statsKeys.map(k => {
+              let val = data.describe[feat][k];
+              let display = typeof val === 'number' ? val.toLocaleString('pt-BR', {maximumFractionDigits:3}) : val;
+              return `<td>${display}</td>`;
+            }).join('')}
+          </tr>
+        `;
+      });
+
+      html += '</tbody></table>';
+      container.innerHTML = html;
     }
 
-    // Função para gerar checkboxes
-    function generateCheckboxes(containerId, features, defaultChecked = []) {
-      const container = document.getElementById(containerId);
-      container.innerHTML = '';
-      
-      features.forEach(feature => {
-        const isChecked = defaultChecked.includes(feature);
-        const checkboxDiv = document.createElement('div');
-        checkboxDiv.className = 'checkbox-item';
-        
-        checkboxDiv.innerHTML = `
-          <input type="checkbox" id="check_${containerId}_${feature}" value="${feature}" ${isChecked ? 'checked' : ''}>
-          <label for="check_${containerId}_${feature}">${feature}</label>
-        `;
-        
-        container.appendChild(checkboxDiv);
+    function popularCheckboxes(features) {
+      const ids = ['checkbox_quadrantes', 'checkbox_imputar', 'checkbox_ignorar'];
+      ids.forEach(id => {
+        const div = document.getElementById(id);
+        div.innerHTML = features.map(f => `
+          <div style="display:flex; align-items:center; gap:8px;">
+            <input type="checkbox" value="${f}" id="${id}_${f}">
+            <label for="${id}_${f}" style="font-size:0.85rem; cursor:pointer;">${f}</label>
+          </div>
+        `).join('');
       });
     }
 
-    // Função para obter features selecionadas
-    function getSelectedCheckboxes(containerId) {
-      const checkboxes = document.querySelectorAll(`#${containerId} input[type="checkbox"]:checked`);
-      return Array.from(checkboxes).map(cb => cb.value);
-    }
+    // --- Quadrantes ---
+    document.getElementById('btn_selecao_quadrantes').addEventListener('click', async function() {
+      const selected = Array.from(document.querySelectorAll('#checkbox_quadrantes input:checked')).map(i => i.value);
+      if (selected.length === 0) return alert("Selecione ao menos uma feature.");
 
-    // Salvar texto original dos botões
-    document.querySelectorAll('button').forEach(btn => {
-      btn.setAttribute('data-original-text', btn.innerHTML);
-    });
+      const btn = this;
+      btn.disabled = true;
+      btn.innerHTML = 'Gerando... <span class="loading"></span>';
 
-    // Card 1 - Upload e Describe
-    document.getElementById('btn_selecao_dados').addEventListener('click', async function () {
-      const fileInput = document.getElementById('input_file');
-      const file = fileInput.files[0];
-      const button = this;
-
-      if (!file) {
-        showAlert('Por favor, selecione um arquivo!', 'error');
-        return;
-      }
-
-      setLoading(button, true);
-      uploadedFile = file;
       const formData = new FormData();
-      formData.append('file', file);
-
-      try {
-        const response = await fetch('http://localhost:8000/describe', {
-          method: 'POST',
-          body: formData
-        });
-
-        if (!response.ok) throw new Error('Erro ao chamar /describe: ' + response.status);
-
-        const data = await response.json();
-
-        // Atualizar Card 2 com layout melhorado
-        let html = `
-          <div class="description-content">
-            <div style="background: #667eea; color: white; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-              <h3 style="margin: 0; color: white;">📊 Informações Gerais</h3>
-              <p style="margin: 10px 0 0 0; font-size: 1.1rem;">${data.shape.rows} linhas × ${data.shape.cols} colunas</p>
-            </div>
-        `;
-        
-        for (const col in data.describe) {
-          html += `
-            <div class="column-info">
-              <h3>📌 ${col}</h3>
-              <div class="stats-grid">
-          `;
-          
-          for (const stat in data.describe[col]) {
-            const value = data.describe[col][stat];
-            const displayValue = typeof value === 'number' ? value.toFixed(4) : value;
-            html += `
-              <div class="stat-item">
-                <span class="stat-label">${stat}</span>
-                <div class="stat-value">${displayValue}</div>
-              </div>
-            `;
-          }
-          
-          html += `
-              </div>
-            </div>
-          `;
-        }
-        html += '</div>';
-        document.getElementById('card2').innerHTML = `<h2>📊 Descrição do Banco</h2>` + html;
-
-        // Atualizar Card 3
-        const formData2 = new FormData();
-        formData2.append('file', file);
-
-        const response2 = await fetch('http://localhost:8000/colunas_nans', {
-          method: 'POST',
-          body: formData2
-        });
-
-        if (!response2.ok) throw new Error('Erro ao chamar /colunas_nans: ' + response2.status);
-
-        const data2 = await response2.json();
-
-        let html2 = `
-          <div class="nans-container">
-            <p style="margin-bottom: 15px;"><strong>Total de colunas com valores ausentes: ${Object.keys(data2).length}</strong></p>
-            <div class="nans-grid">
-        `;
-        
-        const totalRows = data.shape.rows;
-        for (const col in data2) {
-          const nanCount = data2[col];
-          const percentage = ((nanCount / totalRows) * 100).toFixed(2);
-          html2 += `
-            <div class="nan-item">
-              <div class="nan-column-name">${col}</div>
-              <div class="nan-count">${nanCount}</div>
-              <div class="nan-percentage">${percentage}% ausentes</div>
-            </div>
-          `;
-        }
-        html2 += '</div></div>';
-        document.getElementById('card3').innerHTML = `<h2>🔍 Colunas com NaNs</h2>` + html2;
-
-        // Atualizar Card 4 e Card 6 com checkboxes
-        allFeatures = Object.keys(data.describe);
-        generateCheckboxes('checkbox_quadrantes', allFeatures);
-        generateCheckboxes('checkbox_imputar', allFeatures);
-        generateCheckboxes('checkbox_ignorar', allFeatures);
-        
-        showAlert('Arquivo processado com sucesso!', 'success');
-
-      } catch (err) {
-        console.error(err);
-        showAlert('Erro ao processar arquivo: ' + err.message, 'error');
-      } finally {
-        setLoading(button, false);
-      }
-    });
-
-    // Card 4 - Quadrantes
-    document.getElementById('btn_selecao_quadrantes').addEventListener('click', async function () {
-      const file = uploadedFile;
-      const features = getSelectedCheckboxes('checkbox_quadrantes');
-      const button = this;
-
-      if (!file) { 
-        showAlert('Primeiro envie um arquivo no card 1!', 'error'); 
-        return; 
-      }
-      
-      if (features.length === 0) { 
-        showAlert('Selecione ao menos uma feature!', 'error'); 
-        return; 
-      }
-
-      setLoading(button, true);
+      formData.append('file', uploadedFile);
       const params = new URLSearchParams();
-      features.forEach(f => params.append('lista_features', f));
+      selected.forEach(s => params.append('lista_features', s));
+
+      try {
+        const res = await fetch(`http://localhost:8000/info_quadrantes?${params.toString()}`, { method: 'POST', body: formData });
+        const data = await res.json();
+        
+        let html = '';
+        data.forEach(item => {
+          html += `
+            <div style="margin-bottom:40px; border-bottom:1px solid #eee; padding-bottom:20px;">
+              <h3 style="color:#667eea; margin-bottom:10px;">Feature: ${item.feature}</h3>
+              <img src="data:image/png;base64,${item.imagem_base64}" style="max-width:100%; border-radius:8px; border:1px solid #ddd;">
+              <h4 style="margin:15px 0 10px;">Erro Médio por Quadrante:</h4>
+              <div class="table-container">
+                <table style="font-size:0.8rem;">
+                  <tr style="background:#f4f4f4;"><th>Método</th>${Object.keys(item.erro_medio[Object.keys(item.erro_medio)[0]]).map(q => `<th>${q}</th>`).join('')}</tr>
+                  ${Object.entries(item.erro_medio).map(([met, quads]) => `
+                    <tr><td><strong>${met}</strong></td>${Object.values(quads).map(v => `<td>${v ? v.toFixed(4) : '-'}</td>`).join('')}</tr>
+                  `).join('')}
+                </table>
+              </div>
+            </div>`;
+        });
+        document.getElementById('resultado_quadrantes').innerHTML = html;
+      } catch (err) {
+        alert("Erro ao gerar quadrantes.");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = 'Gerar Quadrantes';
+      }
+    });
+
+    // --- Imputação ---
+    document.getElementById('btn_selecao_modelo').addEventListener('click', async function() {
+      const imputar = Array.from(document.querySelectorAll('#checkbox_imputar input:checked')).map(i => i.value);
+      const ignorar = Array.from(document.querySelectorAll('#checkbox_ignorar input:checked')).map(i => i.value);
+      const metodo = document.getElementById('meuSelect').value;
+
+      if (imputar.length === 0) return alert("Selecione features para imputar.");
+
+      const btn = this;
+      btn.disabled = true;
+      btn.innerHTML = 'Processando... <span class="loading"></span>';
 
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append('arquivo', uploadedFile);
+      formData.append('metodo', metodo);
+      formData.append('features_a_imputar', imputar.join(','));
+      if (ignorar.length > 0) formData.append('ignorar', ignorar.join(','));
 
       try {
-        const response3 = await fetch(`http://localhost:8000/info_quadrantes?${params.toString()}`, {
-          method: 'POST',
-          body: formData
-        });
-
-        if (!response3.ok) throw new Error('Erro ao chamar /info_quadrantes: ' + response3.status);
-
-        const data3 = await response3.json();
-
-        let html3 = '<div class="quadrant-content">';
-        for (const item of data3) {
-          html3 += `<div class="quadrant-section">`;
-          html3 += `<h3 style="color: #667eea; font-size: 1.3rem; margin-bottom: 15px;">📊 ${item.feature}</h3>`;
-          html3 += `<img src="data:image/png;base64,${item.imagem_base64}" alt="Gráfico ${item.feature}">`;
-          
-          if (item.erro_medio && Object.keys(item.erro_medio).length > 0) {
-            html3 += `<p style="font-weight: 600; margin-top: 20px; margin-bottom: 10px;">Erro Médio por Método:</p>`;
-            html3 += `<div style="overflow-x: auto;"><table>`;
-
-            const metodos = Object.keys(item.erro_medio);
-            const quadrantes = metodos.length > 0 ? Object.keys(item.erro_medio[metodos[0]]) : [];
-
-            html3 += `<tr><th>Quadrante</th>`;
-            metodos.forEach(m => { html3 += `<th>${m}</th>`; });
-            html3 += `</tr>`;
-
-            for (const quadrante of quadrantes) {
-              html3 += `<tr><td><strong>${quadrante}</strong></td>`;
-              for (const metodo of metodos) {
-                const val = item.erro_medio[metodo][quadrante];
-                html3 += `<td>${(val !== null && val !== undefined) ? Number(val).toFixed(4) : '-'}</td>`;
-              }
-              html3 += `</tr>`;
-            }
-            html3 += `</table></div>`;
-          }
-          html3 += `</div>`;
-        }
-        html3 += '</div>';
-
-        document.getElementById('card5').innerHTML = `<h2>📈 Informação dos Quadrantes</h2>` + html3;
-        showAlert('Quadrantes gerados com sucesso!', 'success');
-
-      } catch (err) {
-        console.error(err);
-        showAlert('Erro ao processar quadrantes: ' + err.message, 'error');
-      } finally {
-        setLoading(button, false);
-      }
-    });
-
-    // Card 6 - Imputação
-    document.getElementById('btn_selecao_modelo').addEventListener('click', async function () {
-      const file = uploadedFile;
-      const featuresImputarList = getSelectedCheckboxes('checkbox_imputar');
-      const featuresIgnorarList = getSelectedCheckboxes('checkbox_ignorar');
-      const metodo = document.getElementById('meuSelect').value;
-      const button = this;
-
-      if (!file) { 
-        showAlert('Primeiro envie um arquivo no card 1!', 'error'); 
-        return; 
-      }
-
-      if (featuresImputarList.length === 0) {
-        showAlert('Selecione ao menos uma feature para imputar!', 'error');
-        return;
-      }
-
-      setLoading(button, true);
-      const formData3 = new FormData();
-      formData3.append('arquivo', file);
-      formData3.append('metodo', metodo);
-      formData3.append('features_a_imputar', featuresImputarList.join(','));
-      
-      if (featuresIgnorarList.length > 0) {
-        formData3.append('ignorar', featuresIgnorarList.join(','));
-      }
-
-      try {
-        const response_imputacao = await fetch('http://localhost:8000/imputar', {
-          method: 'POST',
-          body: formData3
-        });
-
-        if (!response_imputacao.ok) throw new Error('Erro ao chamar /imputar: ' + response_imputacao.status);
-
-        const blob = await response_imputacao.blob();
+        const res = await fetch('http://localhost:8000/imputar', { method: 'POST', body: formData });
+        const blob = await res.blob();
         const url = window.URL.createObjectURL(blob);
-
-        const extensao = file.name.split('.').pop();
-        const linkDownload = document.createElement('a');
-        linkDownload.href = url;
-        linkDownload.download = `imputado_resultado.${extensao}`;
-        document.body.appendChild(linkDownload);
-        linkDownload.click();
-        linkDownload.remove();
-        window.URL.revokeObjectURL(url);
-
-        showAlert('Arquivo imputado baixado com sucesso!', 'success');
-
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `resultado_imputado_${metodo}.csv`;
+        a.click();
       } catch (err) {
-        console.error(err);
-        showAlert('Erro ao imputar dados: ' + err.message, 'error');
+        alert("Erro na imputação.");
       } finally {
-        setLoading(button, false);
+        btn.disabled = false;
+        btn.innerHTML = 'Aplicar Imputação e Baixar';
       }
     });
-
-    // Placeholder styling
-    const style = document.createElement('style');
-    style.textContent = `
-      .placeholder {
-        color: #999;
-        font-style: italic;
-        padding: 20px;
-        text-align: center;
-        background: #f8f9ff;
-        border-radius: 8px;
-      }
-    `;
-    document.head.appendChild(style);
   </script>
 </body>
 </html>
