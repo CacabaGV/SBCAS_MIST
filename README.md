@@ -1,6 +1,13 @@
 # MIST_Download
 Este repositório é para que aqueles que desejarem baixar nossa ferramenta MIST-Saúde, que será apresentada na SBCAS 2026.
 
+## Pré-requisitos:
+
+Antes de começar, você precisará ter instalado em sua máquina:
+* [Docker](https://docs.docker.com/get-docker/)
+* [Docker Compose](https://docs.docker.com/compose/install/) (incluído no Docker Desktop)
+* Git
+
 ## Passos para rodar a ferramente:
 
  - Clone este repositório no diretório que deseje.
