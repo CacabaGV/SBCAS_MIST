@@ -1,2 +1,3 @@
-na pasta raiz, rode: docker compose up -d
-e acesse localhost:3000
+ - Fazer os passos que estão no arquivo `HUGGINGFACE_AUTH.md`
+ - Logo após, rode: docker compose up -d --build
+ - Acesse localhost:3000

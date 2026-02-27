@@ -4,3 +4,4 @@ onda_3/.ipynb_checkpoints
 venv
 __pycache__/
 *.pyc
+.env

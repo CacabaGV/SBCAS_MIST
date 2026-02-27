@@ -1,9 +1,12 @@
 import pandas as pd
+import os
+import torch
 from sklearn.experimental import enable_iterative_imputer
 from sklearn.impute import KNNImputer, IterativeImputer
 from sklearn.ensemble import ExtraTreesRegressor
 from sklearn.linear_model import BayesianRidge
 from tabpfn import TabPFNRegressor
+from huggingface_hub import login as hf_login
 
 class missforest:
     def __init__(self, max_iter: int = 20, random_state: int = 7, feature=None):
@@ -56,7 +59,28 @@ class Mean:
     
 class tabpfn_imputer:
     def __init__(self, feature):
-        self._model = TabPFNRegressor(device="cuda")
+        # Autenticar com HuggingFace se o token estiver disponível
+        hf_token = os.getenv("HF_TOKEN") or os.getenv("HUGGINGFACE_HUB_TOKEN")
+        if hf_token:
+            os.environ.setdefault("HF_TOKEN", hf_token)
+            os.environ.setdefault("HUGGINGFACE_HUB_TOKEN", hf_token)
+            try:
+                hf_login(token=hf_token, add_to_git_credential=False)
+            except Exception as e:
+                print(f"Aviso: Falha ao fazer login com token da HuggingFace: {e}")
+        else:
+            print("Aviso: Token da HuggingFace ausente. Defina HF_TOKEN ou HUGGINGFACE_HUB_TOKEN.")
+        
+        # Detectar se CUDA está disponível
+        if torch.cuda.is_available():
+            device = "cuda"
+            print("TabPFN: CUDA detectado, usando GPU")
+        else:
+            device = "cpu"
+            print("TabPFN: CUDA não disponível, usando CPU")
+        
+        # TabPFNRegressor com suporte a datasets grandes em CPU
+        self._model = TabPFNRegressor(device=device, ignore_pretraining_limits=True)
         self.feature = feature
     
     def fit(self, df_train):

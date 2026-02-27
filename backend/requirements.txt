@@ -14,6 +14,7 @@ scipy>=1.10.0
 
 # Imputação com TabPFN
 tabpfn>=2.0.0
+huggingface-hub>=0.16.0
 
 # Geração de Missing Data
 pygrinder>=0.6
