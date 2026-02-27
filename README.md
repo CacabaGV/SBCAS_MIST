@@ -11,7 +11,7 @@ Este repositório é para que aqueles que desejarem baixar nossa ferramenta MIST
 
 1. Visite https://huggingface.co/Prior-Labs/tabpfn_2_5
 2. Faça login na sua conta HuggingFace ou crie sua conta e confirme o email de verificação
-3. Volte para https://huggingface.co/Prior-Labs/tabpfn_2_5 e clique em "Agree and access repository" para aceitar os termos de uso
+3. Volte para https://huggingface.co/Prior-Labs/tabpfn_2_5 e clique em "Agree and access repository" para aceitar os termos de uso, caso já tenha aceitado siga para o passo 2
 
 ### Passo 2: Obter seu Token HuggingFace
 
