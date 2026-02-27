@@ -22,7 +22,7 @@ Este repositório é para que aqueles que desejarem baixar nossa ferramenta MIST
 
 ### Passo 3: Configurar o Environment
 
-#### crie um arquivo `.env` na raiz do projeto e coloque no arquivo:
+#### Edite o arquivo `.env` na raiz do projeto e coloque no arquivo:
 ```bash
 HF_TOKEN=seu_token_aqui
 ```
