@@ -41,7 +41,7 @@ Com o `HF_TOKEN` configurado, execute:
 docker compose up -d --build
 ```
 
-O token será passado automaticamente durante o build e será disponível para o container em tempo de execução.
+O token será passado automaticamente durante o build e será disponível para o container em tempo de execução. Após o build e run, faça:
 
  - Acesse localhost:3000
  - Após o uso, digite no terminal:
