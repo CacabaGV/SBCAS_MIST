@@ -29,10 +29,11 @@ Antes de começar, você precisará ter instalado em sua máquina:
 
 ### Passo 3: Configurar o Environment
 
-#### Edite o arquivo `.env` na raiz do projeto e coloque no arquivo:
+#### Crie um arquivo chamado exatamente `.env` na raiz do projeto e coloque no arquivo:
 ```bash
 HF_TOKEN=seu_token_aqui
 ```
+Substitua 'seu_token_aqui' pelo token obtido no site HuggingFace
 
 Depois carregue as variáveis no terminal:
 ```bash
