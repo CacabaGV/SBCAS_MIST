@@ -35,7 +35,7 @@ set -a; source .env; set +a  # Se usar bash
 
 ### Passo 4: Executar o Docker
 
-Com o `HF_TOKEN` configurado, execute:
+Com o `HF_TOKEN` configurado e com o Docker Setup inicializado, execute:
 
 ```bash
 docker compose up -d --build
