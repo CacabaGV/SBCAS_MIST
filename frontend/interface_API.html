@@ -185,6 +185,35 @@
 
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #667eea;
+      color: white;
+      padding: 15px 25px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      font-weight: 500;
+      z-index: 1000;
+      animation: slideIn 0.3s ease-out;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    .toast.success { background: #48bb78; }
+    .toast.info { background: #667eea; }
+
     /* Responsividade */
     @media (max-width: 1024px) {
       .container { grid-template-columns: 1fr; }
@@ -267,6 +296,19 @@
   </div>
 
   <script>
+    // Toast Notification Function
+    function showNotification(message, type = 'info', duration = 3000) {
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.style.animation = 'slideOut 0.3s ease-out forwards';
+        setTimeout(() => toast.remove(), 300);
+      }, duration);
+    }
+
     const fileInput = document.getElementById("input_file");
     const uploadArea = document.getElementById("uploadArea");
     const fileNameDisplay = document.getElementById("fileName");
@@ -379,6 +421,8 @@
     document.getElementById('btn_selecao_quadrantes').addEventListener('click', async function() {
       const selected = Array.from(document.querySelectorAll('#checkbox_quadrantes input:checked')).map(i => i.value);
       if (selected.length === 0) return alert("Selecione ao menos uma feature.");
+      
+      showNotification('O TabPFN utiliza o CUDA da Nvidia para um melhor processamento dos dados, caso não tenha Nvidia, ele utilizara a CPU do seu computador. TabPFN é utilizado na `Seleção de Quadrantes` e pode ser escolhido como o algoritmo que irá imputar os dados na seção `Imputação de Dados`', 'info', 15000);
 
       const btn = this;
       btn.disabled = true;
@@ -443,7 +487,7 @@
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `resultado_imputado_${metodo}.csv`;
+        a.download = `${uploadedFile.name.replace(/\.[^.]+$/, '')}_imputado_${metodo}.csv`;
         a.click();
       } catch (err) {
         alert("Erro na imputação.");
