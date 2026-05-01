@@ -43,7 +43,8 @@ COPY --from=builder /root/.local /root/.local
 # Atualiza PATH para incluir os pacotes do usuário
 ENV PATH=/root/.local/bin:$PATH \
     PYTHONUNBUFFERED=1 \
-    HF_TOKEN=${HF_TOKEN}
+    HF_TOKEN=${HF_TOKEN} \
+    TABPFN_TOKEN=${TABPFN_TOKEN}
 
 # Copia código da aplicação
 COPY . .
