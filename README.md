@@ -32,7 +32,8 @@ Antes de começar, você precisará ter instalado em sua máquina:
 1. Acesse https://ux.priorlabs.ai
 2. Faça login ou registre-se
 3. Aceite a licença na aba **Licenses**
-4. Copie sua API Key em https://ux.priorlabs.ai/api/keys e cole no devido espaço .env do passo 3
+4. Crie sua API Key em https://ux.priorlabs.ai/api/keys e copie ela
+5. Cole no devido espaço .env do passo 3
 
 ### Passo 3: Configurar o Environment
 
