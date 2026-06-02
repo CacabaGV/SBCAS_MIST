@@ -1,13 +1,10 @@
 # Build stage
-FROM nvidia/cuda:12.1.0-runtime-ubuntu22.04 as builder
+FROM python:3.11-slim as builder
 
 WORKDIR /app
 
-# Instala Python e dependências de build
+# Instala dependências de build
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    python3.11 \
-    python3-pip \
-    python3.11-dev \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
@@ -25,15 +22,9 @@ RUN if [ -n "$HF_TOKEN" ]; then \
     fi
 
 # Runtime stage
-FROM nvidia/cuda:12.1.0-runtime-ubuntu22.04
+FROM python:3.11-slim
 
 WORKDIR /app
-
-# Instala Python na stage de runtime
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    python3.11 \
-    python3-pip \
-    && rm -rf /var/lib/apt/lists/*
 
 # Aceita HF_TOKEN como build argument para a stage de runtime
 ARG HF_TOKEN=""

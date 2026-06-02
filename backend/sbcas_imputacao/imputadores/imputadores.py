@@ -1,6 +1,5 @@
 import pandas as pd
 import os
-import torch
 from sklearn.experimental import enable_iterative_imputer
 from sklearn.impute import KNNImputer, IterativeImputer
 from sklearn.ensemble import ExtraTreesRegressor
@@ -79,17 +78,8 @@ class tabpfn_imputer:
                 "Defina TABPFN_TOKEN (API Key do Prior Labs) antes de usar o método 'tabpfn'."
             )
         os.environ.setdefault("TABPFN_TOKEN", tabpfn_token)
-        
-        # Detectar se CUDA está disponível
-        if torch.cuda.is_available():
-            device = "cuda"
-            print("TabPFN: CUDA detectado, usando GPU")
-        else:
-            device = "cpu"
-            print("TabPFN: CUDA não disponível, usando CPU")
-        
-        # TabPFNRegressor com suporte a datasets grandes em CPU
-        self._model = TabPFNRegressor(device=device, ignore_pretraining_limits=True)
+
+        self._model = TabPFNRegressor(device="cpu", ignore_pretraining_limits=True)
         self.feature = feature
     
     def fit(self, df_train):

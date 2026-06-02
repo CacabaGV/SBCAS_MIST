@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>MIST - Análise de Dados</title>
+  <title>MIST-Saúde - Análise de Dados</title>
   <style>
     /* Reset e estilos globais */
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -226,7 +226,7 @@
   <div class="site-content">
     <header>
       <div class="logo">
-        <p>MIST</p>
+        <p>MIST-Saúde</p>
       </div>
       <a href="index.html" class="botao-home">Home Page</a>
     </header>
@@ -422,7 +422,7 @@
       const selected = Array.from(document.querySelectorAll('#checkbox_quadrantes input:checked')).map(i => i.value);
       if (selected.length === 0) return alert("Selecione ao menos uma feature.");
       
-      showNotification('O TabPFN utiliza o CUDA da Nvidia para um melhor processamento dos dados, caso não tenha Nvidia, ele utilizara a CPU do seu computador. TabPFN é utilizado na `Seleção de Quadrantes` e pode ser escolhido como o algoritmo que irá imputar os dados na seção `Imputação de Dados`', 'info', 15000);
+      showNotification('O TabPFN roda na CPU neste ambiente. Ele é usado na `Seleção de Quadrantes` e pode ser escolhido como o algoritmo que irá imputar os dados na seção `Imputação de Dados`', 'info', 15000);
 
       const btn = this;
       btn.disabled = true;
